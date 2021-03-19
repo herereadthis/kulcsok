@@ -1,0 +1,27 @@
+{
+  "name": "kulcsok",
+  "version": "1.0.0",
+  "description": "encryption and decryption",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "password": "node src/scripts/password.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herereadthis/kulcsok.git"
+  },
+  "author": "jimmy ha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/herereadthis/kulcsok/issues"
+  },
+  "homepage": "https://github.com/herereadthis/kulcsok#readme",
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "dayjs": "^1.10.4",
+    "js-yaml": "^4.0.0",
+    "lodash": "^4.17.21"
+  }
+}
