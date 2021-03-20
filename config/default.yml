@@ -1,0 +1,5 @@
+file_paths:
+  seed_demo: ./secrets/seed-demo.txt
+  seed: ./secrets/seed.txt
+  secret_demo: ./secrets/secret-demo.yml
+  secret: ./secrets/secret.yml

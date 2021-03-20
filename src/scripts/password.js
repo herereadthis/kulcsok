@@ -1,33 +1,63 @@
+const config = require('config');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const yaml = require('js-yaml');
-const {isEmpty} = require('lodash');
+const {isEmpty, isNil} = require('lodash');
+const yargs = require('yargs/yargs');
+const {hideBin} = require('yargs/helpers');
+
+const {argv} = yargs(hideBin(process.argv));
 
 const SeedPassword = require('./../classes/seed-password');
 
-const seedPassword = new SeedPassword('./src/secrets/seed.txt');
+const SEED_DEMO_PATH = config.get('file_paths.seed_demo');
+const SECRET_DEMO_PATH = config.get('file_paths.secret_demo');
+const SEED_PATH = config.get('file_paths.seed');
+const SECRET_PATH = config.get('file_paths.secret');
 
-// process.argv is an array of command-line arguments
-// [0] is process.execPath
-// [1] is the file being executed
-// [n > 1] are any additional arguments
-// see https://nodejs.org/docs/latest/api/process.html#process_process_argv
-const seedPhraseArg = process.argv[2];
+const seedPassword = new SeedPassword();
 
-if (isEmpty(seedPhraseArg)) {
-    seedPassword.setSeedPhraseFromFile();
+if (!isNil(argv.seed)) {
+    seedPassword.setSeedPhrase(argv.seed);
 } else {
-    seedPassword.setSeedPhrase(seedPhraseArg);
+    let seedPath;
+    if (argv.demo) {
+        if (!fs.existsSync(SEED_DEMO_PATH)) {
+            throw new Error('cannot find demo seed file');
+        }
+        seedPath = SEED_DEMO_PATH;
+    } else {
+        if (!fs.existsSync(SEED_PATH)) {
+            throw new Error('cannot find seed file');
+        }
+        seedPath = SEED_PATH;
+    }
+    seedPassword.setSeedPhraseFilePath(seedPath);
+    seedPassword.setSeedPhraseFromFile();
 }
 
-console.log(seedPassword.password);
+console.log('\nhash');
+console.log(seedPassword.hash);
+console.log('hash\n');
 
-const password = seedPassword.password;
+const {hash: password} = seedPassword;
 
 //Get document, or throw exception on error
 let secret;
 try {
-    secret = yaml.load(fs.readFileSync('./src/secrets/secret.yml', 'utf8'));
+    let seedPath;
+    if (argv.demo) {
+        if (!fs.existsSync(SECRET_DEMO_PATH)) {
+            throw new Error('cannot find demo secret file');
+        }
+        seedPath = SECRET_DEMO_PATH;
+    } else {
+        if (!fs.existsSync(SECRET_PATH)) {
+            throw new Error('cannot find secret file');
+        }
+        seedPath = SECRET_PATH;
+    }
+    secret = yaml.load(fs.readFileSync(seedPath, 'utf8'));
 } catch (err) {
     console.error(err);
 }

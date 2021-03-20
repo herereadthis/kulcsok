@@ -51,7 +51,7 @@ module.exports = class SeedPassword {
         this.seedPhrase = seedPhrase;
     }
 
-    get password() {
+    get hash() {
         return CryptoJS.SHA3(this.seedPhrase, {outputLength: this.hashLength}).toString();
     }
 };

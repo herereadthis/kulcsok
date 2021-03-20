@@ -13,11 +13,14 @@ easier to store accurately. Note: this project does not generate public and priv
 keypairs, use npm [elliptic](https://www.npmjs.com/package/elliptic).
 
 ```bash
+// demo to see it in action
+npm run password:demo
+
 // copy+paste /src/secrets/seed-demo.txt as a new file, named seed.txt
 // seed.txt will be ignored by git
 // Paste your seed phrase into that file.
 npm run password
 
 // Otherwise, pass the seed phrase as an argument
-npm run password 'lorem ipsum sit dolar amet'
+npm run password --  --seed='my secret phrase has many words'
 ```
