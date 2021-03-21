@@ -1,12 +1,14 @@
+const bip39 = require('bip39');
 const config = require('config');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const yaml = require('js-yaml');
-const {isEmpty, isNil} = require('lodash');
+const {isNil} = require('lodash');
 const yargs = require('yargs/yargs');
 const {hideBin} = require('yargs/helpers');
 
 const {argv} = yargs(hideBin(process.argv));
+
 
 const SeedPassword = require('./../classes/seed-password');
 
@@ -14,25 +16,23 @@ const SEED_DEMO_PATH = config.get('file_paths.seed_demo');
 const SECRET_DEMO_PATH = config.get('file_paths.secret_demo');
 const SEED_PATH = config.get('file_paths.seed');
 const SECRET_PATH = config.get('file_paths.secret');
+const SHA3_HASH_LENGTH = config.get('sha3_hash_length');
 
 const seedPassword = new SeedPassword();
+seedPassword.setHashLength(SHA3_HASH_LENGTH);
 
 if (!isNil(argv.seed)) {
     seedPassword.setSeedPhrase(argv.seed);
 } else {
-    let seedPath;
-    if (argv.demo) {
+    if (argv.new) {
+        seedPassword.setSeedPhraseFilePath(SEED_PATH);
+        seedPassword.generateSeedFile(12, true);
+    } else if (argv.demo) {
         if (!fs.existsSync(SEED_DEMO_PATH)) {
             throw new Error('cannot find demo seed file');
         }
-        seedPath = SEED_DEMO_PATH;
-    } else {
-        if (!fs.existsSync(SEED_PATH)) {
-            throw new Error('cannot find seed file');
-        }
-        seedPath = SEED_PATH;
+        seedPassword.setSeedPhraseFilePath(SEED_DEMO_PATH);
     }
-    seedPassword.setSeedPhraseFilePath(seedPath);
     seedPassword.setSeedPhraseFromFile();
 }
 

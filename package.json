@@ -7,6 +7,7 @@
     "start": "node index.js",
     "password": "node src/scripts/password.js",
     "password:demo": "npm run password -- --demo",
+    "password:new": "npm run password -- --new",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/herereadthis/kulcsok#readme",
   "dependencies": {
+    "bip39": "^3.0.3",
     "config": "^3.3.6",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",

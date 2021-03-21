@@ -3,7 +3,14 @@
 ```bash
 nvm use
 npm install
+// At this point, you no longer need the Internets. If you are using this repo
+// for serious business, then disconnect your machine from the Internets.
 ```
+
+## How to get a seed (mnemonic) phrase
+
+It really can be anything you want. However, you are never as random as you think you are. If you want a generated seed
+phrase, try
 
 ## Generate password from seed phrase
 
@@ -16,11 +23,25 @@ keypairs, use npm [elliptic](https://www.npmjs.com/package/elliptic).
 // demo to see it in action
 npm run password:demo
 
-// copy+paste /src/secrets/seed-demo.txt as a new file, named seed.txt
-// seed.txt will be ignored by git
+// Create a new file at ./secrets/seed.txt, or save+as ./secrets/seed-demo.txt
+// seed.txt will be ignored via .gitignore
 // Paste your seed phrase into that file.
 npm run password
+
+// If you are looking to generate a password from scratch
+// Note: this will wipe any currently existing seed.txt file.
+npm run password:new
 
 // Otherwise, pass the seed phrase as an argument
 npm run password --  --seed='my secret phrase has many words'
 ```
+
+**Why not just use `bip39` to generate hashes?** While everything here is a NodeJS app, it should not have to be. The
+secrets generated from this package are intended to last forever, so we must rely on stuff that can be recalled
+potentially decades from now. The scripts in this package are just using SHA-3 for generating hashes, and AES for
+encryption. Both of these standards are approved by the National Institutes of Standards and Technology (NIST).
+
+Even if the npm packages are no longer maintained (or NodeJS itself dies), you should still be able to use those
+standards to recover your secrets. Just do all the work again in COBOL, or Scala, or whatever they are using in the
+year 2036. If we were to rely on bip39, then your secrets will become subject to the whims of those working on bip39,
+assuming that the project even lasts as long as we need it to.
