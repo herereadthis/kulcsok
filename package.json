@@ -8,6 +8,8 @@
     "password": "node src/scripts/password.js",
     "password:demo": "npm run password -- --demo",
     "password:new": "npm run password -- --new",
+    "encrypt": "node src/scripts/encrypt.js",
+    "encrypt:demo": "npm run encrypt -- --demo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

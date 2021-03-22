@@ -3,5 +3,8 @@ file_paths:
   seed: ./secrets/seed.txt
   secret_demo: ./secrets/secret-demo.yml
   secret: ./secrets/secret.yml
+  secret_encrypted: ./secrets/secret.aes
 
 sha3_hash_length: 256
+
+seed_word_length: 15

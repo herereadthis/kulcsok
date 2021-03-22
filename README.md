@@ -20,10 +20,10 @@ easier to store accurately. Note: this project does not generate public and priv
 keypairs, use npm [elliptic](https://www.npmjs.com/package/elliptic).
 
 ```bash
-// demo to see it in action
+// demo to see it in action. It will use ./secrets/secret-demo.txt
 npm run password:demo
 
-// Create a new file at ./secrets/seed.txt, or save+as ./secrets/seed-demo.txt
+// Create a new file at ./secrets/seed.txt
 // seed.txt will be ignored via .gitignore
 // Paste your seed phrase into that file.
 npm run password
@@ -33,7 +33,9 @@ npm run password
 npm run password:new
 
 // Otherwise, pass the seed phrase as an argument
-npm run password --  --seed='my secret phrase has many words'
+npm run password 'my secret phrase has many words'
+// Overwrite seed.txt file if you want to store the seed phrase
+npm run password -- 'my secret phrase has many words' --overwrite
 ```
 
 **Why not just use `bip39` to generate hashes?** While everything here is a NodeJS app, it should not have to be. The
@@ -45,3 +47,13 @@ Even if the npm packages are no longer maintained (or NodeJS itself dies), you s
 standards to recover your secrets. Just do all the work again in COBOL, or Scala, or whatever they are using in the
 year 2036. If we were to rely on bip39, then your secrets will become subject to the whims of those working on bip39,
 assuming that the project even lasts as long as we need it to.
+
+## Encrypt
+
+```bash
+// See it in action
+npm run encrypt:demo
+
+// Manually do it
+npm run encrypt 'myPass1234' 'This is my secret message'
+```

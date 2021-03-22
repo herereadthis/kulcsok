@@ -52,6 +52,10 @@ module.exports = class SeedPassword {
         return bip39.generateMnemonic(strength);
     }
 
+    static getSanitizedSeedPhrase(seedPhase) {
+        return seedPhase.split('\n')[0].trim();
+    }
+
     setSeedPhraseFilePath(pathToFile) {
         if (!fs.existsSync(pathToFile)) {
             throw new Error('cannot find seed file at path');
@@ -59,12 +63,15 @@ module.exports = class SeedPassword {
         this.pathToFile = pathToFile;
     }
 
-    setSeedPhraseFromFile() {
+    setSeedPhraseFromFile(pathToFile) {
+        if (!isNil(pathToFile)) {
+            this.setSeedPhraseFilePath(pathToFile);
+        }
         try {
             let rawdata = fs.readFileSync(this.pathToFile, {encoding: 'utf8', flag: 'r'});
             // Only get first line of txt file
             // trim beginning and ending of seed phrase
-            this.setSeedPhrase(rawdata.split('\n')[0].trim());
+            this.setSeedPhrase(SeedPassword.getSanitizedSeedPhrase(rawdata));
         } catch (err) {
             console.error(err);
         }
@@ -82,7 +89,8 @@ module.exports = class SeedPassword {
         this.hashLength = hashLength;
     }
 
-    generateSeedFile(wordLength = 12, showSeed = false) {
+    generateSeed(pathToFile, wordLength = 15, showSeed = false) {
+        this.setSeedPhraseFilePath(pathToFile);
         console.info('Generating Seed File...');
         if (isNil(this.pathToFile)) {
             throw new Error('File Path not specified!');
@@ -91,9 +99,14 @@ module.exports = class SeedPassword {
         if (showSeed) {
             console.info(mnemonic);
         }
+        this.setSeedPhrase(mnemonic);
+        this.writeSeedFile(mnemonic);
+    }
+
+    writeSeedFile() {
         try {
-            fs.writeFileSync(this.pathToFile, mnemonic);
-            console.info(`Generated seed file at: ${this.pathToFile}`);
+            fs.writeFileSync(this.pathToFile, this.seedPhrase);
+            console.info(`Created seed file at: ${this.pathToFile}`);
         } catch (err) {
             console.error(err);
         }
@@ -116,8 +129,8 @@ module.exports = class SeedPassword {
         if (!isString(seedPhrase)) {
             throw new Error('Seed Phrase must be a string.');
         }
-        if (seedPhrase.trim() !== seedPhrase) {
-            throw new Error('Seed Phrase must not include beginning or ending spaces.');
+        if (SeedPassword.getSanitizedSeedPhrase(seedPhrase) !== seedPhrase) {
+            throw new Error('Seed Phrase must not include line breaks or beginning or ending spaces.');
         }
         this.seedPhrase = seedPhrase;
     }
