@@ -12,6 +12,7 @@ const SECRET_ENCRYPTED_PATH = config.get('file_paths.secret_encrypted');
 module.exports = class Encryptor {
 
     constructor(password, sourceFilePath = SECRET_PATH, destinationFilePath = SECRET_ENCRYPTED_PATH) {
+        console.log(12345);
         this.password = password;
         this.sourceFilePath = this.getSourceFilePath(sourceFilePath);
         this.destinationFilePath = destinationFilePath;
@@ -30,19 +31,18 @@ module.exports = class Encryptor {
         return sourceFilePath;
     }
 
-    setDestinationFilePath(destinationFilePath) {
-        this.destinationFilePath = destinationFilePath;
-    }
-
     setFormattedSource() {
         this.checkValidity();
 
         try {
             let parsedSource;
+            const options = {encoding:'utf8', flag:'r'};
             if (this.fileType === 'yml') {
-                parsedSource = yaml.load(fs.readFileSync(this.sourceFilePath, 'utf8'));
-            } else if (this.fileType = 'json') {
-                parsedSource = JSON.parse(fs.readFileSync(this.sourceFilePath));
+                parsedSource = yaml.load(fs.readFileSync(this.sourceFilePath, options));
+            } else if (this.fileType === 'json') {
+                parsedSource = JSON.parse(fs.readFileSync(this.sourceFilePath, options));
+            } else if (this.fileType === 'txt') {
+                parsedSource = fs.readFileSync(this.sourceFilePath, options);
             }
             this.source = parsedSource;
         } catch (err) {
@@ -54,22 +54,22 @@ module.exports = class Encryptor {
         this.source = data;
     }
 
-    writeEncryptedFile() {
+    get cipherText() {
         this.checkValidity();
 
-        let cipherText;
-        try {
-            if (isNil(this.source)) {
-                this.setFormattedSource();
-            }
+        if (isNil(this.source)) {
+            this.setFormattedSource();
+        }
+        return CryptoJS.AES.encrypt(JSON.stringify(this.source), this.password).toString();
+    }
 
-            cipherText = CryptoJS.AES.encrypt(JSON.stringify(this.source), this.password).toString();
-            fs.writeFileSync(this.destinationFilePath, cipherText);
+    writeEncryptedFile() {
+        try {
+            fs.writeFileSync(this.destinationFilePath, this.cipherText);
             console.info(`Encrypted file created at: ${this.destinationFilePath}`);
         } catch (err) {
             console.error(err);
         }
-        return cipherText;
     }
 
     checkValidity() {

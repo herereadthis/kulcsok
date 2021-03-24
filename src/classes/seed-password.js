@@ -1,15 +1,23 @@
 const bip39 = require('bip39');
+const config = require('config');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
+const SEED_PATH = config.get('file_paths.seed');
+
 module.exports = class SeedPassword {
 
-    constructor(pathToFile, seedPhrase, hashLength = 256) {
+    constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = 256) {
         this.seedPhrase = seedPhrase;
-        this.pathToFile = pathToFile;
         this.setHashLength(hashLength);
+        this.pathToFile = null;
+
+        if (!isNil(pathToFile)) {
+            console.log(1234);
+            this.setSeedPhraseFromFile(pathToFile);
+        }
     }
 
     /**

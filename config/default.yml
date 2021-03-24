@@ -7,4 +7,4 @@ file_paths:
 
 sha3_hash_length: 256
 
-seed_word_length: 15
+bip39_word_length: 15

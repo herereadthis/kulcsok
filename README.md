@@ -56,4 +56,6 @@ npm run encrypt:demo
 
 // Manually do it
 npm run encrypt 'myPass1234' 'This is my secret message'
+
+// Past your .yml or .json file for secrets
 ```
