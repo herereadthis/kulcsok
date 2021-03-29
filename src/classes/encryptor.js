@@ -7,12 +7,11 @@ const yaml = require('js-yaml');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
 const SECRET_PATH = config.get('file_paths.secret');
-const SECRET_ENCRYPTED_PATH = config.get('file_paths.secret_encrypted');
+const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted');
 
 module.exports = class Encryptor {
 
-    constructor(password, sourceFilePath = SECRET_PATH, destinationFilePath = SECRET_ENCRYPTED_PATH) {
-        console.log(12345);
+    constructor(password, sourceFilePath = SECRET_PATH, destinationFilePath = SECRET_ENCRYPTED_FILE_NAME) {
         this.password = password;
         this.sourceFilePath = this.getSourceFilePath(sourceFilePath);
         this.destinationFilePath = destinationFilePath;

@@ -15,7 +15,6 @@ module.exports = class SeedPassword {
         this.pathToFile = null;
 
         if (!isNil(pathToFile)) {
-            console.log(1234);
             this.setSeedPhraseFromFile(pathToFile);
         }
     }
