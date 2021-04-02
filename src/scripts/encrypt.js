@@ -18,40 +18,67 @@ const SEED_PATH = config.get('file_paths.seed');
 const SECRET_PATH = config.get('file_paths.secret');
 const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted');
 const SHA3_HASH_LENGTH = config.get('sha3_hash_length');
-const DIST_PATH = config.get('file_paths.dist');
+const BUILD_PATH = config.get('file_paths.build');
+const META_FILE_PATH = config.get('file_paths.meta_file');
 
 const {argv} = yargs(hideBin(process.argv));
 
 
 dayjs.extend(utc);
 
-if (!fs.existsSync(DIST_PATH)){
-    fs.mkdirSync(DIST_PATH);
+if (!fs.existsSync(BUILD_PATH)){
+    fs.mkdirSync(BUILD_PATH);
 }
 
-
-
-const getTimestamp = () => {
-    const now = dayjs();
-
-    return dayjs.utc(now).format('YYYY-MM-DD-HHmmss')
+const foo = (options) => {
+    const {
+        fileType,
+        timestamp,
+        timestampDirectory,
+        passwordHashLength,
+        passwordEncoding
+    } = options;
+    const text =
+`utc_timestamp: ${timestamp}
+timestamp_directory: ${timestampDirectory}
+file:
+  type: ${fileType}
+password:
+  encoding: ${passwordEncoding}
+  hashLength: ${passwordHashLength}
+`;
+    return text;
 };
 
 
 if (argv.demo) {
     const seedPassword = new SeedPassword(SEED_DEMO_PATH);
     const encryptor = new Encryptor(seedPassword.hash, SECRET_DEMO_PATH);
-    // console.log(encryptor.cipherText);
-    // console.log(encryptor.source);
 
-    const timestamp = getTimestamp();
-    // console.log(timestamp);
+    const encryptionTimestamp = encryptor.encryptionTimestamp;
 
-    const buildFolder = `${DIST_PATH}/build-${timestamp}`;
+    const timestampDirectory = encryptor.timestampDirectory;
+
+    const buildFolder = `${BUILD_PATH}/${timestampDirectory}`;
     fs.mkdirSync(buildFolder);
 
     encryptor.destinationFilePath = `${buildFolder}/${SECRET_ENCRYPTED_FILE_NAME}`;
     encryptor.writeEncryptedFile();
+
+    try {
+        const metaFilePath = `${buildFolder}/${META_FILE_PATH}`;
+        const text = foo({
+            timestamp: encryptionTimestamp,
+            timestampDirectory,
+            passwordEncoding: seedPassword.encoding,
+            passwordHashLength: seedPassword.hashLength,
+            fileType: encryptor.fileType
+        });
+        console.log(text);
+        fs.writeFileSync(metaFilePath, text);
+    } catch (err) {
+        console.error(err);
+    }
 
 } else if (!isNil(process.argv[2]) && !isNil(process.argv[3])) {
     // args: password and message

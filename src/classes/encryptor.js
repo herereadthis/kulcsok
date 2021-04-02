@@ -1,6 +1,7 @@
 const bip39 = require('bip39');
 const config = require('config');
 const CryptoJS = require('crypto-js');
+const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
@@ -12,10 +13,13 @@ const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted');
 module.exports = class Encryptor {
 
     constructor(password, sourceFilePath = SECRET_PATH, destinationFilePath = SECRET_ENCRYPTED_FILE_NAME) {
+        const now = new Date();
+
         this.password = password;
         this.sourceFilePath = this.getSourceFilePath(sourceFilePath);
         this.destinationFilePath = destinationFilePath;
         this.fileType = Encryptor.getFileType(this.sourceFilePath);
+        this.encryptionTimestamp = dayjs.utc(now).toISOString();
     }
 
     static getFileType(filePath) {
@@ -28,6 +32,10 @@ module.exports = class Encryptor {
             throw new Error('cannot find source file at path');
         }
         return sourceFilePath;
+    }
+
+    get timestampDirectory() {
+        return dayjs.utc(this.encryptionTimestamp).format('YYYY-MM-DD-HHmmss');
     }
 
     setFormattedSource() {

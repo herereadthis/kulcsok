@@ -10,6 +10,7 @@ const SEED_PATH = config.get('file_paths.seed');
 module.exports = class SeedPassword {
 
     constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = 256) {
+        this.encoding = 'utf8';
         this.seedPhrase = seedPhrase;
         this.setHashLength(hashLength);
         this.pathToFile = null;
@@ -75,7 +76,7 @@ module.exports = class SeedPassword {
             this.setSeedPhraseFilePath(pathToFile);
         }
         try {
-            let rawdata = fs.readFileSync(this.pathToFile, {encoding: 'utf8', flag: 'r'});
+            let rawdata = fs.readFileSync(this.pathToFile, {encoding: this.encoding, flag: 'r'});
             // Only get first line of txt file
             // trim beginning and ending of seed phrase
             this.setSeedPhrase(SeedPassword.getSanitizedSeedPhrase(rawdata));
