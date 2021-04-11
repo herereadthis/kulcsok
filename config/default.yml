@@ -3,7 +3,9 @@ file_paths:
   seed: ./secrets/seed.txt
   secret_demo: ./secrets/secret-demo.yml
   secret: ./secrets/secret.yml
-  secret_encrypted: secret.aes
+  secret_decrypted_file: secret.txt
+  secret_encrypted_file: secret.aes
+  secret_encrypted: ./secrets/secret.aes
   build: ./build
   meta_file: meta.yml
 

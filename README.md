@@ -59,3 +59,10 @@ npm run encrypt 'myPass1234' 'This is my secret message'
 
 // Past your .yml or .json file for secrets
 ```
+
+## Decrypt
+
+```bash
+// See it in action
+npm run decrypt:demo
+```

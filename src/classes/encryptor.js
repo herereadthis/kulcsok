@@ -4,11 +4,15 @@ const CryptoJS = require('crypto-js');
 const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path');
-const yaml = require('js-yaml');
+const jsYaml = require('js-yaml');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
+const utc = require('dayjs/plugin/utc');
+const YAML = require('yaml');
 
 const SECRET_PATH = config.get('file_paths.secret');
-const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted');
+const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted_file');
+
+dayjs.extend(utc);
 
 module.exports = class Encryptor {
 
@@ -45,7 +49,7 @@ module.exports = class Encryptor {
             let parsedSource;
             const options = {encoding:'utf8', flag:'r'};
             if (this.fileType === 'yml') {
-                parsedSource = yaml.load(fs.readFileSync(this.sourceFilePath, options));
+                parsedSource = jsYaml.load(fs.readFileSync(this.sourceFilePath, options));
             } else if (this.fileType === 'json') {
                 parsedSource = JSON.parse(fs.readFileSync(this.sourceFilePath, options));
             } else if (this.fileType === 'txt') {
@@ -92,5 +96,28 @@ module.exports = class Encryptor {
         if (isNil(this.password)) {
             throw new Error('cannot encrypt file without password');
         }
+    }
+
+    generateMeta(options) {
+        const {
+            passwordHashLength,
+            passwordEncoding
+        } = options;
+        const text = {
+            utc_timestamp: this.encryptionTimestamp,
+            timestampDirectory: this.timestampDirectory,
+            file: {
+                type: this.fileType
+            },
+            password: {
+                enccoding: passwordEncoding,
+                hashLength: passwordHashLength
+            }
+        };
+
+        const doc = new YAML.Document();
+        doc.contents = text;
+
+        return doc.toString();
     }
 };
