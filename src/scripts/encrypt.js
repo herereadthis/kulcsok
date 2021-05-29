@@ -1,4 +1,5 @@
 const bip39 = require('bip39');
+const chalk = require('chalk');
 const config = require('config');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
@@ -26,8 +27,17 @@ if (!fs.existsSync(BUILD_PATH)){
     fs.mkdirSync(BUILD_PATH);
 }
 
+// Command example: 'npm run encrypt:demo'
 if (argv.demo) {
+    console.info(chalk.magenta('Running Encrypt (demo)...'));
     const seedPassword = new SeedPassword(SEED_DEMO_PATH);
+
+    console.info(
+        'Seed Path:', chalk.cyan(SEED_DEMO_PATH),
+        '\nSeed Password:', chalk.cyan(seedPassword.seedPhrase),
+        '\n'
+    );
+
     const encryptor = new Encryptor(seedPassword.hash, SECRET_DEMO_PATH);
     const timestampDirectory = encryptor.timestampDirectory;
 
@@ -50,28 +60,40 @@ if (argv.demo) {
     }
 
 } else if (!isNil(process.argv[2]) && !isNil(process.argv[3])) {
+    // Command Example: 'npm run "password123" "my secret phrase"'
+    console.info(chalk.magenta('Running Encrypt (manual password + manual secret)...'));
+
+    const password = process.argv[2];
+    const secret = process.argv[3];
     // args: password and message
-    const encryptor = new Encryptor(process.argv[2]);
-    encryptor.setSource(process.argv[3]);
-    let foo = encryptor.cipherText;
+    const encryptor = new Encryptor(password);
+    encryptor.setSource(secret);
+    const cipherText = encryptor.cipherText;
 
-    console.log(foo);
+    console.info(
+        'Seed Password:', chalk.cyan(password),
+        '\nEncrypted secret: ', chalk.cyan(cipherText),
+        '\n'
+    );
 
-    const bytes2  = CryptoJS.AES.decrypt(foo, process.argv[2]);
-    const decryptedData2 = JSON.parse(bytes2.toString(CryptoJS.enc.Utf8));
-    console.log(decryptedData2);
+    // Confirmation
+    const bytes  = CryptoJS.AES.decrypt(cipherText, password);
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    if (decryptedData !== secret) {
+        throw new Error('whoops could not decrypt properly');
+    }
 } else if (process.argv.length === 3) {
     // args: password only
     const encryptor = new Encryptor(process.argv[2]);
     let foo = encryptor.cipherText;
 
-    console.log(foo);
+    console.log(2, foo);
 
     const bytes3  = CryptoJS.AES.decrypt(foo, process.argv[2]);
     const decryptedData3 = JSON.parse(bytes3.toString(CryptoJS.enc.Utf8));
-    console.log(decryptedData3);
+    console.log(3, decryptedData3);
 } else if (process.argv.length === 2) {
-
+    console.log(4);
     const seedPassword = new SeedPassword();
     console.log(seedPassword.seedPhrase);
     console.log(seedPassword.hash);

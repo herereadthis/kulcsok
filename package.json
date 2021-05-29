@@ -26,6 +26,7 @@
   "homepage": "https://github.com/herereadthis/kulcsok#readme",
   "dependencies": {
     "bip39": "^3.0.3",
+    "chalk": "^4.1.1",
     "config": "^3.3.6",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",

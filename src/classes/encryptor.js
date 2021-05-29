@@ -1,4 +1,5 @@
 const bip39 = require('bip39');
+const chalk = require('chalk');
 const config = require('config');
 const CryptoJS = require('crypto-js');
 const dayjs = require('dayjs');
@@ -77,7 +78,7 @@ module.exports = class Encryptor {
     writeEncryptedFile() {
         try {
             fs.writeFileSync(this.destinationFilePath, this.cipherText);
-            console.info(`Encrypted file created at: ${this.destinationFilePath}`);
+            console.info('Encrypted file location: ', chalk.cyan(this.destinationFilePath));
         } catch (err) {
             console.error(err);
         }
