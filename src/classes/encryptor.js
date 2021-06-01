@@ -78,7 +78,6 @@ module.exports = class Encryptor {
     writeEncryptedFile() {
         try {
             fs.writeFileSync(this.destinationFilePath, this.cipherText);
-            console.info('Encrypted file location: ', chalk.cyan(this.destinationFilePath));
         } catch (err) {
             console.error(err);
         }
