@@ -12,7 +12,8 @@
     "encrypt:demo": "npm run encrypt -- --demo",
     "decrypt": "node src/scripts/decrypt.js",
     "decrypt:demo": "npm run decrypt -- --demo",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bats": "./node_modules/bats/bin/bats -v"
   },
   "repository": {
     "type": "git",
@@ -37,5 +38,8 @@
     "lodash": "^4.17.21",
     "yaml": "^1.10.2",
     "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "bats": "^1.4.1"
   }
 }
