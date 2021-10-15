@@ -27,6 +27,9 @@
   "engines": {
     "node": ">=14.18.0 <15"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "homepage": "https://github.com/herereadthis/kulcsok#readme",
   "dependencies": {
     "bip39": "^3.0.3",
@@ -40,6 +43,8 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "bats": "^1.4.1"
+    "bats": "^1.4.1",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.2"
   }
 }
