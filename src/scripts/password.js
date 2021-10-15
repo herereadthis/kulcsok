@@ -1,5 +1,5 @@
 const config = require('config');
-const fs = require('fs');
+// const fs = require('fs');
 const {isNil} = require('lodash');
 const yargs = require('yargs/yargs');
 const {hideBin} = require('yargs/helpers');

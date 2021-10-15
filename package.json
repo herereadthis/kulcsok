@@ -4,16 +4,7 @@
   "description": "encryption and decryption",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "password": "node src/scripts/password.js",
-    "password:demo": "npm run password -- --demo",
-    "password:new": "npm run password -- --new",
-    "encrypt": "node src/scripts/encrypt.js",
-    "encrypt:demo": "npm run encrypt -- --demo",
-    "decrypt": "node src/scripts/decrypt.js",
-    "decrypt:demo": "npm run decrypt -- --demo",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bats": "./node_modules/bats/bin/bats -v"
+    "test": "./node_modules/mocha/bin/mocha test/**/*test.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +17,6 @@
   },
   "engines": {
     "node": ">=14.18.0 <15"
-  },
-  "scripts": {
-    "test": "mocha"
   },
   "homepage": "https://github.com/herereadthis/kulcsok#readme",
   "dependencies": {
@@ -45,6 +33,10 @@
   "devDependencies": {
     "bats": "^1.4.1",
     "chai": "^4.3.4",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "mocha": "^9.1.2"
   }
 }

@@ -2,7 +2,7 @@ const bip39 = require('bip39');
 const config = require('config');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
-const yaml = require('js-yaml');
+// const yaml = require('js-yaml');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
 const SEED_PATH = config.get('file_paths.seed');
