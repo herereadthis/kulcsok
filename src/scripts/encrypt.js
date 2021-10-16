@@ -27,10 +27,6 @@ if (!fs.existsSync(BUILD_PATH)){
     fs.mkdirSync(BUILD_PATH);
 }
 
-
-
-
-
 if (argv.demo) {
     // Command example: 'npm run encrypt:demo'
     runDemoScript();
@@ -47,6 +43,9 @@ if (argv.demo) {
     console.log(seedPassword.hash);
 }
 
+/**
+ * Run a demo of Encryptor
+ */
 function runDemoScript() {
     console.info(chalk.magenta('Running Encrypt (demo)...'));
     const seedPassword = new SeedPassword(SEED_DEMO_PATH);
@@ -82,6 +81,12 @@ function runDemoScript() {
     }
 }
 
+/**
+ * Run a demo of manual encryption
+ * 
+ * @param {string} password - what will encrypt the secret
+ * @param {string} secret - the string to be encrypted
+ */
 function runManualScript(password, secret) {
     console.info(chalk.magenta('Running Encrypt (manual password + manual secret)...'));
 
@@ -101,7 +106,11 @@ function runManualScript(password, secret) {
         throw new Error('whoops could not decrypt properly');
     }
 }
-
+/**
+ * Encrypt a file from config defaults, with a password
+ * 
+ * @param {string} password - used to encrypt the file
+ */
 function runManualPasswordScript(password) {
     console.info(chalk.magenta('Running Encrypt (manual password)...'));
 

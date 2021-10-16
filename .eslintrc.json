@@ -5,12 +5,16 @@
         "es6": true
     },
     "extends": [
-        "eslint:recommended"
+        "eslint:recommended",
+        "plugin:jsdoc/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 9,
         "sourceType": "module"
     },
+    "plugins": [
+      "jsdoc"
+    ],
     "rules": {
         "comma-dangle": 2,
         "comma-spacing": [

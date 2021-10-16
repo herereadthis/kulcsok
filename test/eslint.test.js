@@ -27,8 +27,13 @@ const paths = glob.sync('{./test/**/*.js,./src/**/*.js}');
 const results = engine.executeOnFiles(paths).results;
 const MESSAGE_FILE_IGNORED = 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.';
 
-// utility for formatting eslint output
-// fixme: it seems to drop the last letter in some messages
+/**
+ * utility for formatting eslint output
+ * 
+ * @todo it seems to drop the last letter in some messages
+ * @param {string} messages - the stuff to format
+ * @returns {string} errors - what went wrong
+ */
 function formatMessages(messages) {
     const errors = messages.map((message) => {
         return `${message.line}:${message.column} ${message.message.slice(0, -1)} - ${message.ruleId}\n`;
@@ -37,7 +42,11 @@ function formatMessages(messages) {
     return `\n${errors.join('')}`;
 }
 
-// utility for generating a test for each file
+/**
+ * utility for generating a test for each file
+ * 
+ * @param {object} result - what
+ */
 function generateTest(result) {
     const { filePath, messages } = result;
 

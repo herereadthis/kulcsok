@@ -1,3 +1,7 @@
+/**
+ * @module Decryptor
+ */
+
 // const bip39 = require('bip39');
 // const config = require('config');
 const CryptoJS = require('crypto-js');
@@ -34,7 +38,8 @@ module.exports = class Decryptor {
 
     /**
      * Decrypts the data from a source and sets it as decryptedData.
-     * @param {string} sourcePath 
+     * 
+     * @param {string} sourcePath - file path of source
      */
     decryptFromSource(sourcePath) {
         const sourceEncrypted = fs.readFileSync(sourcePath, this.decryptOptions);

@@ -25,7 +25,8 @@ module.exports = class SeedPassword {
      * accurately. As long as the bip39 project is maintained, this method can
      * be used.
      *
-     * @param {number} wordLength
+     * @param {number} wordLength - how many words in generated seed phrase
+     * @returns {string} seedPhrase - a phrase for generating passwords
      */
     static getBip39Mnemonic(wordLength = 12) {
         const allowed = [12, 15, 18, 21, 24];
@@ -121,15 +122,20 @@ module.exports = class SeedPassword {
     }
 
     /**
-     * Validates the mnemonic
+     * Validate the mnemonic
      *
-     * @param {string} mnemonic
-     * @returns {boolean} validity
+     * @param {string} mnemonic - Seed phrase to generate password
+     * @returns {boolean} validity - whether seed phrase is valid
      */
     validateBip39Mnemonic(mnemonic) {
         return bip39.validateMnemonic(mnemonic);
     }
 
+    /**
+     * Set the seedPhrase of the SeedPassword instance
+     * 
+     * @param {string} seedPhrase - a phrase for generating passwords
+     */
     setSeedPhrase(seedPhrase) {
         if (isEmpty(seedPhrase)) {
             throw new Error('Cannot set empty seed phrase.');
@@ -143,6 +149,9 @@ module.exports = class SeedPassword {
         this.seedPhrase = seedPhrase;
     }
 
+    /**
+     * @returns {string} hash
+     */
     get hash() {
         return CryptoJS.SHA3(this.seedPhrase, {outputLength: this.hashLength}).toString();
     }
