@@ -1,12 +1,12 @@
-const bip39 = require('bip39');
-const chalk = require('chalk');
+// const bip39 = require('bip39');
+// const chalk = require('chalk');
 const config = require('config');
 const CryptoJS = require('crypto-js');
 const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path');
 const jsYaml = require('js-yaml');
-const {isNil, isEmpty, isString, isFinite} = require('lodash');
+const {isNil} = require('lodash');
 const utc = require('dayjs/plugin/utc');
 const YAML = require('yaml');
 
