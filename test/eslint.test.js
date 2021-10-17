@@ -2,11 +2,8 @@
  * Found here: https://robots.thoughtbot.com/testing-your-style-with-eslint-and-mocha
  * Throw unit test failures when eslint fails.
  */
-
-const glob = require('glob');
-const CLIEngine = require('eslint').CLIEngine;
-const assert = require('chai').assert;
-// const _ = require('lodash');
+const {ESLint} = require('eslint');
+const {assert} = require('chai');
 
 /**
  * This uses the eslint cache just like we do on the command line version of
@@ -15,16 +12,20 @@ const assert = require('chai').assert;
  * on all files instead. To avoid this conflict, we use a different cache file
  * when running the tests.
  */
-const engine = new CLIEngine({
-    cache: true,
-    cacheLocation: '.eslintcache-tests',
-    envs: ['node', 'mocha'],
-    useEslintrc: true
-});
+// const engine = new ESLint({
+//     cache: true,
+//     cacheLocation: '.eslintcache-tests',
+//     'overrideConfig.env': ['node', 'mocha'],
+//     useEslintrc: true
+// });
 
-// get paths to run eslint on (exclusions will be applied by .eslintignore)
-const paths = glob.sync('{./test/**/*.js,./src/**/*.js}');
-const results = engine.executeOnFiles(paths).results;
+
+
+// const engine = new ESLint();
+
+// // get paths to run eslint on (exclusions will be applied by .eslintignore)
+// const paths = glob.sync('{./test/**/*.js, ./src/**/*.js}');
+// const results = engine.lintFiles(paths).results;
 const MESSAGE_FILE_IGNORED = 'File ignored because of a matching ignore pattern. Use "--no-ignore" to override.';
 
 /**
@@ -60,6 +61,20 @@ function generateTest(result) {
     }
 }
 
-describe('ESLint', function() {
-    results.forEach((result) => generateTest(result));
+
+// let results;
+
+
+(async function main() {
+    const eslint = new ESLint();
+
+    const results = await eslint.lintFiles(['./test/**/*.js', './src/**/*.js']);
+
+    describe('ESLint', function() {
+        results.forEach((result) => generateTest(result));
+    });
+
+})().catch((error) => {
+    process.exitCode = 1;
+    console.error(error);
 });
