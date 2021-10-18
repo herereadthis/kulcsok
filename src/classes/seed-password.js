@@ -1,3 +1,5 @@
+/** @module seed-password */
+
 const bip39 = require('bip39');
 const config = require('config');
 const CryptoJS = require('crypto-js');
@@ -7,8 +9,19 @@ const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
 const SEED_PATH = config.get('file_paths.seed');
 
+/**
+ * @class
+ * @classdesc - Generate a Bip39 Seed phrase which can later be used to generate
+ *              keys.
+ */
 module.exports = class SeedPassword {
 
+    /**
+     * @constructs 
+     * @param {string} pathToFile - file path
+     * @param {string} seedPhrase - bip39 phrase
+     * @param {number} hashLength - value for SHA3 encryption
+     */
     constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = 256) {
         this.encoding = 'utf8';
         this.seedPhrase = seedPhrase;
