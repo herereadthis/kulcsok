@@ -6,9 +6,37 @@ name: Node.js CI
 #  pull_request:
 #    branches: [ $default-branch ]
 
+
 on: [push]
 
 jobs:
+  gimme-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump job context
+        env:
+          JOB_CONTEXT: ${{ toJSON(job) }}
+        run: echo "$JOB_CONTEXT"
+      - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJSON(steps) }}
+        run: echo "$STEPS_CONTEXT"
+      - name: Dump runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJSON(runner) }}
+        run: echo "$RUNNER_CONTEXT"
+      - name: Dump strategy context
+        env:
+          STRATEGY_CONTEXT: ${{ toJSON(strategy) }}
+        run: echo "$STRATEGY_CONTEXT"
+      - name: Dump matrix context
+        env:
+          MATRIX_CONTEXT: ${{ toJSON(matrix) }}
+        run: echo "$MATRIX_CONTEXT"
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +75,41 @@ jobs:
           node-version: ${{ steps.nvm.outputs.NVMRC }}
           cache: 'npm'
       - run: npm ci
-      - run: npm run bats -v
       - run: npm run build --if-present
       - run: npm test
+  fun:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: github hello world1
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: 'Mona the Octocat'
+      - name: github hello world21
+        uses: actions/hello-world-javascript-action@main
+        with:
+          who-to-greet: format('{{Hello {0} {1} {2}!}}', 'Mona', 'the', 'Octocat')
+      - name: bats
+        run: npm run bats -v
+
+
+# github: 
+#   action: string
+#   action_path: string
+#   actor: string
+#   base_ref: string
+#   event: object, see https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows
+#   event_name: string
+#   event_path: string
+#   head_ref: string
+#   job: string
+#   repository: string
+#   repository_owner: string
+#   run_id: string
+#   run_number: string
+#   run_attempt: string
+#   server_url: string
+#   sha: string
+#   token: string
+#   workflow: string - name of workflow
+#   workspace: string
