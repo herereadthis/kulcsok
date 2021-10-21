@@ -72,10 +72,10 @@ jobs:
       # - name: List files
       #   run: |
       #     ls -lha
-      # - name: List action files
-      #   working-directory: .github/actions
-      #   run: |
-      #     ls -lha
+      - name: node junk
+        run: |
+          cd ./.github/actions/foo
+          npm ci
       - uses: actions/checkout@v2
       - name: custom action
         uses: ./.github/actions/foo
