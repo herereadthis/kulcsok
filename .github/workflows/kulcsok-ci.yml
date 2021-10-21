@@ -91,6 +91,18 @@ jobs:
           who-to-greet: format('{{Hello {0} {1} {2}!}}', 'Mona', 'the', 'Octocat')
       - name: bats
         run: npm run bats -v
+      # - name: List files
+      #   run: |
+      #     ls -lha
+      # - name: List action files
+      #   working-directory: .github/actions
+      #   run: |
+      #     ls -lha
+      # - uses: actions/checkout@v2
+      - name: custom action
+        uses: ./.github/actions/foo
+        with:
+          who-to-greet: 'foo'
 
 
 # github: 
