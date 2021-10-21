@@ -100,7 +100,7 @@ jobs:
       #     ls -lha
       # - uses: actions/checkout@v2
       - name: custom action
-        uses: ./.github/actions/foo
+        uses: herereadthis/kulcsok/.github/actions/foo
         with:
           who-to-greet: 'foo'
 
