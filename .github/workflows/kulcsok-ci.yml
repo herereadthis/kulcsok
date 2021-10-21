@@ -1,12 +1,5 @@
 name: Node.js CI
 
-#on:
-#  push:
-#    branches: [ $default-branch ]
-#  pull_request:
-#    branches: [ $default-branch ]
-
-
 on: [push]
 
 jobs:
@@ -44,15 +37,6 @@ jobs:
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-#  check-bats-version:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-node@v2
-#        with:
-#          node-version: '14'
-#      - run: npm install -g bats
-#      - run: npm run bats
   build:
     runs-on: ubuntu-latest
     # strategy:
@@ -85,12 +69,6 @@ jobs:
         uses: actions/hello-world-javascript-action@main
         with:
           who-to-greet: 'Mona the Octocat'
-      - name: github hello world21
-        uses: actions/hello-world-javascript-action@main
-        with:
-          who-to-greet: format('{{Hello {0} {1} {2}!}}', 'Mona', 'the', 'Octocat')
-      - name: bats
-        run: npm run bats -v
       # - name: List files
       #   run: |
       #     ls -lha
@@ -98,11 +76,28 @@ jobs:
       #   working-directory: .github/actions
       #   run: |
       #     ls -lha
-      # - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: custom action
-        uses: herereadthis/kulcsok/.github/actions/foo
+        uses: ./.github/actions/foo
         with:
           who-to-greet: 'foo'
+
+#on:
+#  push:
+#    branches: [ $default-branch ]
+#  pull_request:
+#    branches: [ $default-branch ]
+
+
+#  check-bats-version:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - uses: actions/setup-node@v2
+#        with:
+#          node-version: '14'
+#      - run: npm install -g bats
+#      - run: npm run bats
 
 
 # github: 
