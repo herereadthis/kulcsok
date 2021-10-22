@@ -81,7 +81,7 @@ jobs:
         uses: ./.github/actions/foo
         with:
           who-to-greet: 'foo'
-          branch: GITHUB_REF
+          branch: ${{ GITHUB_REF }}
 
 #on:
 #  push:
