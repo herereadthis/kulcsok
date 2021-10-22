@@ -5,6 +5,10 @@ inputs:
     description: 'Who to greet'
     required: true
     default: 'World'
+  branch:  # id of input
+    description: 'Branch Name'
+    required: true
+    default: 'Foo'
 outputs:
   time: # id of output
     description: 'The time we greeted you'
