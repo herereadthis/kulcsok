@@ -3,6 +3,37 @@ name: Node.js CI
 on: [push]
 
 jobs:
+  the-time:
+    runs-on: ubuntu-latest
+    outputs:
+      tag-name: ${{ steps.tag-name.outputs.TAG_NAME }}
+    steps:
+      # Use for other things.....
+      # - uses: actions/checkout@v2
+      # - name: install node on time action
+      #   run: |
+      #     cd ./.github/actions/time
+      #     npm ci
+      # - name: run time action
+      #   uses: ./.github/actions/time
+      #   id: current-time
+      # - name: Use Current Time
+      #   env:
+      #     TIME: "${{ steps.current-time.outputs.time }}"
+      #   run: echo $TIME
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H')"
+      - name: Test with environment variables
+        run: echo $TAG_NAME - $RELEASE_NAME
+        env:
+          TAG_NAME: nightly-tag-${{ steps.date.outputs.date }}
+          RELEASE_NAME: nightly-release-${{ steps.date.outputs.date }}
+      - name: set tag name
+        run: echo '::set-output name=TAG_NAME::tag-${{ steps.date.outputs.date }}'
+        id: tag-name
+      - name: get tag name
+        run: echo "the tag name is ${{ steps.tag-name.outputs.TAG_NAME}}"
   gimme-context:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +67,6 @@ jobs:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
   build:
     runs-on: ubuntu-latest
     # strategy:
@@ -61,27 +91,27 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-  fun:
-    needs: build
+  Fun:
+    needs: [build, the-time]
     runs-on: ubuntu-latest
     steps:
-      - name: github hello world1
-        uses: actions/hello-world-javascript-action@main
-        with:
-          who-to-greet: 'Mona the Octocat'
-      # - name: List files
-      #   run: |
-      #     ls -lha
+      # - name: github hello world1
+      #   uses: actions/hello-world-javascript-action@main
+      #   with:
+      #     who-to-greet: 'Mona the Octocat'
       - uses: actions/checkout@v2
-      - name: node junk
+      - name: install node on foo action
         run: |
           cd ./.github/actions/foo
           npm ci
-      - name: custom action
+      - name: run foo action
         uses: ./.github/actions/foo
         with:
           who-to-greet: 'foo'
-          branch: $GITHUB_REF
+          branch: ${{ github.ref }}
+      - name: get tag name again ${{needs.the-time.outputs.tag-name}}
+        run: echo ${{needs.the-time.outputs.tag-name}}
+
 
 #on:
 #  push:

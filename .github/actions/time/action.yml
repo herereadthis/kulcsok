@@ -1,0 +1,8 @@
+name: "the time"
+description: "get the time"
+outputs:
+  time:
+    description: "The time this action was run"
+runs:
+  using: "node12"
+  main: "index.js"
