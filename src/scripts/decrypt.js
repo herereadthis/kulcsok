@@ -20,7 +20,6 @@ const BUILD_PATH = config.get('file_paths.build');
 // const SECRET_PATH = config.get('file_paths.secret');
 // const SECRET_DECRYPTED_FILE_NAME = config.get('file_paths.secret_decrypted_file');
 // const SECRET_ENCRYPTED_FILE_NAME = config.get('file_paths.secret_encrypted_file');
-// const SHA3_HASH_LENGTH = config.get('sha3_hash_length');
 // const META_FILE_PATH = config.get('file_paths.meta_file');
 
 const {argv} = yargs(hideBin(process.argv));

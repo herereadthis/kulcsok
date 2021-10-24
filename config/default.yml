@@ -9,6 +9,7 @@ file_paths:
   build: ./build
   meta_file: meta.yml
 
-sha3_hash_length: 256
+seed_password:
+  sha3_hash_length: 256
 
 bip39_word_length: 15

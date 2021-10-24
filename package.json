@@ -4,7 +4,16 @@
   "description": "encryption and decryption",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha test/**/*test.js"
+    "test": "./node_modules/mocha/bin/mocha test/**/*test.js",
+    "start": "node index.js",
+    "password": "node src/scripts/password.js",
+    "password:demo": "npm run password -- --demo",
+    "password:new": "npm run password -- --new",
+    "encrypt": "node src/scripts/encrypt.js",
+    "encrypt:demo": "npm run encrypt -- --demo",
+    "decrypt": "node src/scripts/decrypt.js",
+    "decrypt:demo": "npm run decrypt -- --demo",
+    "bats": "./node_modules/bats/bin/bats -v"
   },
   "repository": {
     "type": "git",

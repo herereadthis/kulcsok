@@ -8,6 +8,7 @@ const fs = require('fs');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
 const SEED_PATH = config.get('file_paths.seed');
+const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
 
 /**
  * @class
@@ -22,7 +23,7 @@ module.exports = class SeedPassword {
      * @param {string} seedPhrase - bip39 phrase
      * @param {number} hashLength - value for SHA3 encryption
      */
-    constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = 256) {
+    constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = SHA3_HASH_LENGTH) {
         this.encoding = 'utf8';
         this.seedPhrase = seedPhrase;
         this.setHashLength(hashLength);

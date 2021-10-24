@@ -19,7 +19,6 @@ const META_FILE_PATH = config.get('file_paths.meta_file');
 // const SEED_PATH = config.get('file_paths.seed');
 // const SECRET_PATH = config.get('file_paths.secret');
 // const SECRET_ENCRYPTED_PATH = config.get('file_paths.secret_encrypted');
-// const SHA3_HASH_LENGTH = config.get('sha3_hash_length');
 
 const {argv} = yargs(hideBin(process.argv));
 
