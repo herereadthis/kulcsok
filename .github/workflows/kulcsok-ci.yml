@@ -5,6 +5,8 @@ on: [push]
 jobs:
   the-time:
     runs-on: ubuntu-latest
+    # send outputs from one job to another job
+    # taken from https://stackoverflow.com/questions/59175332
     outputs:
       tag-name: ${{ steps.tag-name.outputs.TAG_NAME }}
     steps:

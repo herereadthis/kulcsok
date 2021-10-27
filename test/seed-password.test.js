@@ -16,4 +16,56 @@ describe('SeedPassword', () => {
             // expect(seedPassword.encoding).to.equal('utf8');
         });
     });
+
+    describe('SeedPassword.getSanitizedSeedPhrase', () => {
+        it('strips spaces', () => {
+            const phrase = 'lorem ipsum';
+            const paddedPhrase = ` ${phrase} `;
+            const result = SeedPassword.getSanitizedSeedPhrase(paddedPhrase);
+            expect(result).to.equal(phrase);
+        });
+    });
+
+    describe('setSeedPhrase', () => {
+        let seedPassword;
+
+        beforeEach(() => {
+            seedPassword = new SeedPassword();
+        });
+
+        it('sets seed phrase', () => {
+            const seedPhrase = 'lorem ipsum sit dolor amet';
+
+            seedPassword.setSeedPhrase(seedPhrase);
+
+            expect(seedPassword.seedPhrase).to.equal(seedPhrase);
+        });
+
+        it('sets fails with no phrase', () => {
+            expect(() => {
+                seedPassword.setSeedPhrase();
+            }).to.throw(Error);
+        });
+
+        it('fails if phrase is not a string', () => {
+            expect(() => {
+                seedPassword.setSeedPhrase(1234);
+            }).to.throw(Error);
+            expect(() => {
+                seedPassword.setSeedPhrase({foo: 'bar'});
+            }).to.throw(Error);
+            expect(() => {
+                seedPassword.setSeedPhrase(['asdf']);
+            }).to.throw(Error);
+            expect(() => {
+                seedPassword.setSeedPhrase(' spaces ');
+            }).to.throw(Error);
+        });
+
+        it('fails if phrase has extra spaces', () => {
+            expect(() => {
+                seedPassword.setSeedPhrase(' spaces ');
+            }).to.throw(Error);
+        });
+    });
 });

@@ -20,12 +20,11 @@ module.exports = class SeedPassword {
     /**
      * @constructs 
      * @param {string} pathToFile - file path
-     * @param {string} seedPhrase - bip39 phrase
-     * @param {number} hashLength - value for SHA3 encryption
+     * @param {number} [hashLength=SHA3_HASH_LENGTH] - value for SHA3 encryption
      */
-    constructor(pathToFile = SEED_PATH, seedPhrase, hashLength = SHA3_HASH_LENGTH) {
+    constructor(pathToFile = SEED_PATH, hashLength = SHA3_HASH_LENGTH) {
         this.encoding = 'utf8';
-        this.seedPhrase = seedPhrase;
+        this.seedPhrase = null;
         this.setHashLength(hashLength);
         this.pathToFile = null;
 
@@ -39,6 +38,7 @@ module.exports = class SeedPassword {
      * accurately. As long as the bip39 project is maintained, this method can
      * be used.
      *
+     * @static
      * @param {number} wordLength - how many words in generated seed phrase
      * @returns {string} seedPhrase - a phrase for generating passwords
      */
@@ -75,6 +75,11 @@ module.exports = class SeedPassword {
         return bip39.generateMnemonic(strength);
     }
 
+    /**
+     * @static
+     * @param {string} seedPhase - phrase for generating hashes
+     * @returns {string} sanitizedSeedPhrase
+     */
     static getSanitizedSeedPhrase(seedPhase) {
         return seedPhase.split('\n')[0].trim();
     }
@@ -152,10 +157,10 @@ module.exports = class SeedPassword {
      */
     setSeedPhrase(seedPhrase) {
         if (isEmpty(seedPhrase)) {
-            throw new Error('Cannot set empty seed phrase.');
+            throw new TypeError('Cannot set empty seed phrase.');
         }
         if (!isString(seedPhrase)) {
-            throw new Error('Seed Phrase must be a string.');
+            throw new TypeError('Seed Phrase must be a string.');
         }
         if (SeedPassword.getSanitizedSeedPhrase(seedPhrase) !== seedPhrase) {
             throw new Error('Seed Phrase must not include line breaks or beginning or ending spaces.');
