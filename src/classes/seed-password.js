@@ -1,4 +1,8 @@
-/** @module seed-password */
+/** 
+ * Generates and saves hashes from seed phrases
+ *
+ * @module SeedPassword
+ */
 
 const bip39 = require('bip39');
 const config = require('config');
@@ -7,13 +11,15 @@ const fs = require('fs');
 // const yaml = require('js-yaml');
 const {isNil, isEmpty, isString, isFinite} = require('lodash');
 
+/** @constant {string} SEED_PATH - default path to store seed phrase in file */
 const SEED_PATH = config.get('file_paths.seed');
 const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
 
 /**
- * @class
+ * @class module:SeedPassword.SeedPassword
  * @classdesc - Generate a Bip39 Seed phrase which can later be used to generate
  *              keys.
+ * @property {Function} generateSeed {@link module:SeedPassword#generateSeed}
  */
 module.exports = class SeedPassword {
 
@@ -117,6 +123,15 @@ module.exports = class SeedPassword {
         this.hashLength = hashLength;
     }
 
+    /**
+     * Generate a seed and save to file
+     * 
+     * @public
+     * @function module:SeedPassword#generateSeed
+     * @param {string} pathToFile - location of file to seed phrase
+     * @param {number} [wordLength=15] length of mnemonic
+     * @param {boolean} [showSeed=false] - whether to diplay in console
+     */
     generateSeed(pathToFile, wordLength = 15, showSeed = false) {
         this.setSeedPhraseFilePath(pathToFile);
         console.info('Generating Seed File...');

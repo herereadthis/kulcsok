@@ -7,7 +7,7 @@ const SeedPassword = require('../src/classes/seed-password');
 const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
 
 describe('SeedPassword', () => {
-    describe('instantiation', () => {
+    describe('constructor', () => {
         it('have set defaults', () => {
             const seedPassword = new SeedPassword();
             // console.log(seedPassword.seedPhrase);
@@ -17,7 +17,7 @@ describe('SeedPassword', () => {
         });
     });
 
-    describe('SeedPassword.getSanitizedSeedPhrase', () => {
+    describe('SeedPassword.getSanitizedSeedPhrase()', () => {
         it('strips spaces', () => {
             const phrase = 'lorem ipsum';
             const paddedPhrase = ` ${phrase} `;
@@ -26,7 +26,7 @@ describe('SeedPassword', () => {
         });
     });
 
-    describe('setSeedPhrase', () => {
+    describe('setSeedPhrase()', () => {
         let seedPassword;
 
         beforeEach(() => {
@@ -65,6 +65,28 @@ describe('SeedPassword', () => {
         it('fails if phrase has extra spaces', () => {
             expect(() => {
                 seedPassword.setSeedPhrase(' spaces ');
+            }).to.throw(Error);
+        });
+    });
+
+    describe('setSeedPhraseFilePath()', () => {
+        let seedPassword;
+
+        beforeEach(() => {
+            seedPassword = new SeedPassword();
+        });
+
+        it('sets path', () => {
+            seedPassword.setSeedPhraseFilePath('./index.js');
+            // expect(() => {
+            //     seedPassword.setSeedPhrase(' spaces ');
+            // }).to.throw(Error);
+            expect(seedPassword.pathToFile).to.equal('./index.js');
+        });
+
+        it('throws error on missing file', () => {
+            expect(() => {
+                seedPassword.setSeedPhraseFilePath('foo.js');
             }).to.throw(Error);
         });
     });
