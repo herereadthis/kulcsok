@@ -33,5 +33,10 @@
         }],
         "no-unused-vars": 1,
         "quotes": ["error", "single"]
+    },
+    "settings": {
+        "jsdoc": {
+            "mode": "typescript"
+        }
     }
 }

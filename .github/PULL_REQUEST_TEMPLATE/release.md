@@ -1,0 +1,1 @@
+# Release pull request template
