@@ -24,9 +24,19 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - name: do node stuff
+        run: |
+          node manual.yml
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.version.name }}"
-    runs:
-      using: 'node14'
-      main: 'manual.js'
