@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Version Bump
+name: 'Version Bump'
 
 # Controls when the action will run. Workflow runs when manually triggered using
 # the UI or API.
@@ -37,6 +37,6 @@ jobs:
       - name: do node stuff
         run: |
           node manual.yml
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.version.name }}"
+      # Runs a single command using the runners shell
+      - name: Send greeting
+        run: echo "Hello ${{ github.event.version.name }}"
