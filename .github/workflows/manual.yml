@@ -36,7 +36,7 @@ jobs:
           ls ${{ github.workspace }}
       - name: do node stuff
         run: |
-          node manual.yml
+          node ./.github/workflows/manual.js
       # Runs a single command using the runners shell
       - name: Send greeting
         run: echo "Hello ${{ github.event.version.name }}"
