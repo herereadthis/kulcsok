@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      branch:
+      base_branch:
         description: 'Base Branch'
         default: 'master'
-        required: true
+        required: false
       version:
         description: 'Version Number'
         # Default value if no value is explicitly provided
@@ -39,10 +39,13 @@ jobs:
           ls ${{ github.workspace }}
       - name: do node stuff
         run: |
-          git checkout master
-          git checkout -b bump--version-${{ github.event.branch.name }}
-          git push origin bump--version-${{ github.event.branch.name }}
-          node ./.github/workflows/manual.js ${{ github.event.branch.name }}
+          node ./.github/workflows/manual.js ${{ github.event.base_branch.name }}
       # Runs a single command using the runners shell
       - name: Send greeting
         run: echo "Hello ${{ github.event.version.name }}"
+
+
+
+# git checkout master
+# git checkout -b bump--version-${{ github.event.branch.name }}
+# git push origin bump--version-${{ github.event.branch.name }}
