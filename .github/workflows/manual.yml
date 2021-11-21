@@ -8,10 +8,6 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
-      base_branch:
-        description: 'Base Branch'
-        default: 'master'
-        required: false
       version:
         description: 'Version Number'
         # Default value if no value is explicitly provided
@@ -26,6 +22,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -39,7 +36,7 @@ jobs:
           ls ${{ github.workspace }}
       - name: do node stuff
         run: |
-          node ./.github/workflows/manual.js ${{ github.event.base_branch.name }}
+          node ./.github/workflows/manual.js
       # Runs a single command using the runners shell
       - name: Send greeting
         run: echo "Hello ${{ github.event.version.name }}"
