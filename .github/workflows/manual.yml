@@ -40,11 +40,22 @@ jobs:
       - name: do node stuff
         run: |
           git checkout master
-          git checkout -b bump--version-${{ github.event.branch.name }}
-          git push origin bump--version-${{ github.event.branch.name }}
-          node ./.github/workflows/manual.js ${{ github.event.version.name }}
+          git checkout -b bump-version-${{ github.event.version.name }}
+          git push origin bump-version-${{ github.event.version.name }}
+      - uses: actions/checkout@v2
+      - name: install node on bump action
+        run: |
+          cd ./.github/actions/bump
+          npm ci
+      - name: run bump action
+        uses: ./.github/actions/bump
+        with:
+          version: ${{ github.event.version.name }}
       # Runs a single command using the runners shell
       - name: Send greeting
         run: echo "Hello ${{ github.event.version.name }}"
 
 
+
+# git push origin bump-version-${{ github.event.version.name }}
+# node ./.github/workflows/manual.js ${{ github.event.version.name }}

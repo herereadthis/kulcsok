@@ -1,9 +1,11 @@
+const core = require('@actions/core');
+const github = require('@actions/github');
 const chalk = require('chalk');
 const shell = require('shelljs');
 
-
 shell.config.verbose = true;
-const versionNumber = process.argv[2];
+// const versionNumber = process.argv[2];
+const versionNumber = core.getInput('version');
 // const childPackages = ['./meteor-db', './meteor-scripts', './meteor-server', './meteor-ui', './scripts'];
 
 console.log(`Version number is: ${versionNumber}`);

@@ -1,0 +1,12 @@
+name: 'Bump Version'
+description: 'Bump the version number of the repo'
+inputs:
+  version:
+    description: 'Version Number'
+    required: true
+# outputs:
+#   time: # id of output
+#     description: 'The time we greeted you'
+runs:
+  using: 'node14'
+  main: 'index.js'
