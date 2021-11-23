@@ -8,6 +8,14 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs:
+      environment:
+        description: 'Define env name'     
+        required: true
+        default: 'prod'
+      branch:
+        description: 'Define branch name'     
+        required: true
+        default: 'master'
       base_branch:
         description: 'Base Branch'
         default: 'master'
@@ -21,12 +29,15 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
-  greet:
+  foo:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     steps:
+      - name: stack overflow demo
+        run: |
+          echo "Env: ${{ github.event.inputs.environment }}" 
+          echo "Branch: ${{ github.event.inputs.branch }}"
       - name: checkout
         uses: actions/checkout@v2
       - name: Use Node.js 14
