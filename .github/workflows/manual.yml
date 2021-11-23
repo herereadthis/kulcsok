@@ -37,6 +37,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      # Runs a single command using the runners shell
+      - name: Send greeting
+        run: echo "Hello ${{ github.event.version.name }}"
       - name: do node stuff
         run: |
           git checkout master
@@ -51,9 +54,6 @@ jobs:
         uses: ./.github/actions/bump
         with:
           version: ${{ github.event.version.name }}
-      # Runs a single command using the runners shell
-      - name: Send greeting
-        run: echo "Hello ${{ github.event.version.name }}"
 
 
 
