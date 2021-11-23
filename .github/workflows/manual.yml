@@ -50,12 +50,12 @@ jobs:
           ls ${{ github.workspace }}
       # Runs a single command using the runners shell
       - name: Send greeting
-        run: echo "Hello ${{ github.event.version.name }}"
+        run: echo "Hello ${{ github.event.inputs.version.name }}"
       - name: do node stuff
         run: |
           git checkout master
-          git checkout -b bump-version-${{ github.event.version.name }}
-          git push origin bump-version-${{ github.event.version.name }}
+          git checkout -b bump-version-${{ github.event.inputs.version.name }}
+          git push origin bump-version-${{ github.event.inputs.version.name }}
       - uses: actions/checkout@v2
       - name: install node on bump action
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: run bump action
         uses: ./.github/actions/bump
         with:
-          version: ${{ github.event.version.name }}
+          version: ${{ github.event.inputs.version.name }}
 
 
 
