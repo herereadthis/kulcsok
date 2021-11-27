@@ -1,6 +1,9 @@
 name: 'Bump Version'
 description: 'Bump the version number of the repo'
 inputs:
+  base_branch:
+    description: 'Base Branch'
+    required: true
   version:
     description: 'Version Number'
     required: true
