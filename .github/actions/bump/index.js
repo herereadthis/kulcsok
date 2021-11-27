@@ -1,5 +1,4 @@
-import core from '@actions/core';
-import github from '@actions/github';
+import * as core from '@actions/core';
 import shell from 'shelljs';
 import semverRegex from 'semver-regex';
 
