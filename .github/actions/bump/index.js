@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const shell = require('shelljs');
+const semverRegex = require('semver-regex');
 
 shell.config.verbose = true;
 const versionNumber = core.getInput('version');
