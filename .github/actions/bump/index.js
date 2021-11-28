@@ -23,13 +23,17 @@ if (!semverRegex().test(versionNumber)) {
     throw new Error('Version number is not semver!');
 }
 
-try {
-    await git
-        .addConfig('user.email', getInput(email))
-        .addConfig('user.name', getInput(actor));
-} catch (err) {
-    throw err;
-}
+const configure = async () => {
+    try {
+        await git
+            .addConfig('user.email', getInput(email))
+            .addConfig('user.name', getInput(actor));
+    } catch (err) {
+        throw err;
+    }
+};
+
+configure();
 
 shell.exec(`git checkout ${baseBranch}`);
 shell.exec(`git checkout -b bump-version-${versionNumber}`);
