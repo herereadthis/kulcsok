@@ -18,14 +18,6 @@ on:
         # default: null
         # Input has to be provided for the workflow to run
         required: true
-      actor:
-        descrption: 'Actor'
-        default: ${{ github.actor }}
-        required: true
-      email:
-        description: 'Email'
-        default: 'developers@llabs.email'
-        required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,8 +28,8 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
-      - name: What is actor
-        run: echo ${{ github.actor }}
+      # - name: What is actor
+      #   run: echo ${{ github.actor }}
   bump:
     name: 'Bump Version'
     # The type of runner that the job will run on
@@ -71,5 +63,3 @@ jobs:
         with:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
-          actor: ${{github.actor }}
-          email: ${{github.event.inputs.email}}
