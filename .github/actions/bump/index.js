@@ -12,11 +12,6 @@ const versionNumber = core.getInput('version');
 const baseBranch = core.getInput('base_branch');
 const actor = github.context.actor;
 const email = `${actor}@email.com`;
-// const versionNumber = '1.1.17';
-// const baseBranch = 'master';
-// const actor = 'herereadthis';
-// const email = 'herereadthis@email.com';
-
 
 const newBranch = `bump-version-${versionNumber}`
 
@@ -38,6 +33,10 @@ const configure = async () => {
         await git
             .addConfig('user.email', email)
             .addConfig('user.name', actor)
+            .addConfig('author.email', email)
+            .addConfig('author.name', actor)
+            .addConfig('committer.email', email)
+            .addConfig('committer.name', actor)
             .checkoutBranch(newBranch, baseBranch);
 
         shell.exec(`npm version ${versionNumber} --no-git-tag-version`);
