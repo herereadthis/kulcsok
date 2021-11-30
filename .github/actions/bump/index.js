@@ -8,14 +8,14 @@ const git = simpleGit();
 
 shell.config.verbose = true;
 
-// const versionNumber = core.getInput('version');
-// const baseBranch = core.getInput('base_branch');
-// const actor = github.context.actor;
-// const email = `${actor}@email.com`;
-const versionNumber = '1.1.17';
-const baseBranch = 'master';
-const actor = 'herereadthis';
-const email = 'herereadthis@email.com';
+const versionNumber = core.getInput('version');
+const baseBranch = core.getInput('base_branch');
+const actor = github.context.actor;
+const email = `${actor}@email.com`;
+// const versionNumber = '1.1.17';
+// const baseBranch = 'master';
+// const actor = 'herereadthis';
+// const email = 'herereadthis@email.com';
 
 
 const newBranch = `bump-version-${versionNumber}`
