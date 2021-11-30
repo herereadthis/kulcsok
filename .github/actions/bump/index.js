@@ -7,17 +7,27 @@ const simpleGit = require('simple-git');
 const git = simpleGit();
 
 shell.config.verbose = true;
-const versionNumber = core.getInput('version');
-const baseBranch = core.getInput('base_branch');
-const actor = github.context.actor;
-const email = `${actor}@email.com`;
+
+// const versionNumber = core.getInput('version');
+// const baseBranch = core.getInput('base_branch');
+// const actor = github.context.actor;
+// const email = `${actor}@email.com`;
+const versionNumber = '1.1.17';
+const baseBranch = 'master';
+const actor = 'herereadthis';
+const email = 'herereadthis@email.com';
+
+
+const newBranch = `bump-version-${versionNumber}`
 
 console.log(`Version number is: ${versionNumber}`);
 console.log(`Base Branch is: ${baseBranch}`);
+console.log(`New Branch is: ${newBranch}`);
 console.log(`Actor is ${actor}`);
 console.log(`Email is ${email}`);
-console.log('github context');
-console.log(github.context);
+
+// console.log('github context');
+// console.log(github.context);
 
 if (!semverRegex().test(versionNumber)) {
     throw new Error('Version number is not semver!');
@@ -26,8 +36,19 @@ if (!semverRegex().test(versionNumber)) {
 const configure = async () => {
     try {
         await git
-            .addConfig('user.email', getInput(email))
-            .addConfig('user.name', getInput(actor));
+            .addConfig('user.email', email)
+            .addConfig('user.name', actor)
+            .checkoutBranch(newBranch, baseBranch);
+
+        shell.exec(`npm version ${versionNumber} --no-git-tag-version`);
+
+        await git
+            .add('package.json')
+            .add('package-lock.json')
+            .commit(`Bump version ${versionNumber}`)
+            .push('origin', newBranch);
+
+        console.log(`Pushed branch ${newBranch}`);
     } catch (err) {
         throw err;
     }
@@ -35,12 +56,3 @@ const configure = async () => {
 
 configure();
 
-shell.exec(`git checkout ${baseBranch}`);
-shell.exec(`git checkout -b bump-version-${versionNumber}`);
-shell.exec(`git add package.json package-lock.json`);
-shell.exec(`npm version ${versionNumber} --no-git-tag-version`);
-shell.exec(`git add package.json package-lock.json`);
-shell.exec(`git commit -m "Bump version ${versionNumber}"`);
-shell.exec(`git push origin bump-version-${versionNumber}`);
-
-console.log(`Pushed branch bump-version-${versionNumber}`);

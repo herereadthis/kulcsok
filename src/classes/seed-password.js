@@ -24,18 +24,29 @@ const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
 module.exports = class SeedPassword {
 
     /**
-     * @constructs 
-     * @param {string} pathToFile - file path
-     * @param {number} [hashLength=SHA3_HASH_LENGTH] - value for SHA3 encryption
+     * @typedef {object} [SeedPasswordOptions={}]
+     * @property {string} [pathToFile] - file path
+     * @property {number} [hashLength] - value for SHA3 encryption
+     * @property {boolean} [reateSeedFileIfNotExist] - create a file if necessary
      */
-    constructor(pathToFile = SEED_PATH, hashLength = SHA3_HASH_LENGTH) {
+
+    /**
+     * @constructs 
+     * @param {SeedPasswordOptions} options - configuration
+     */
+    constructor(options = {}) {
+        console.log('\n*******\n');
+        const pathToFile = isNil(options.pathToFile) ? SEED_PATH : options.pathToFile;
+        const hashLength = isNil(options.hashLength) ? SHA3_HASH_LENGTH : options.hashLength;
+        const createSeedFileIfNotExist = isNil(options.createSeedFileIfNotExist) ? true : options.createSeedFileIfNotExist;
+
         this.encoding = 'utf8';
         this.seedPhrase = null;
         this.setHashLength(hashLength);
         this.pathToFile = null;
 
         if (!isNil(pathToFile)) {
-            this.setSeedPhraseFromFile(pathToFile);
+            this.setSeedPhraseFromFile(pathToFile, createSeedFileIfNotExist);
         }
     }
 
@@ -90,16 +101,22 @@ module.exports = class SeedPassword {
         return seedPhase.split('\n')[0].trim();
     }
 
-    setSeedPhraseFilePath(pathToFile) {
-        if (!fs.existsSync(pathToFile)) {
+    setSeedPhraseFilePath(pathToFile, createIfNotExist = true) {
+        if (!fs.existsSync(pathToFile) && !createIfNotExist) {
             throw new Error('cannot find seed file at path');
+        } else if (createIfNotExist) {
+            try{
+                fs.writeFileSync(pathToFile, SeedPassword.getBip39Mnemonic(15));
+            }catch (err){
+                throw new Error('Cannot write new seed file');
+            }
         }
         this.pathToFile = pathToFile;
     }
 
-    setSeedPhraseFromFile(pathToFile) {
+    setSeedPhraseFromFile(pathToFile, createSeedFileIfNotExist) {
         if (!isNil(pathToFile)) {
-            this.setSeedPhraseFilePath(pathToFile);
+            this.setSeedPhraseFilePath(pathToFile, createSeedFileIfNotExist);
         }
         try {
             let rawdata = fs.readFileSync(this.pathToFile, {encoding: this.encoding, flag: 'r'});
@@ -131,9 +148,10 @@ module.exports = class SeedPassword {
      * @param {string} pathToFile - location of file to seed phrase
      * @param {number} [wordLength=15] length of mnemonic
      * @param {boolean} [showSeed=false] - whether to diplay in console
+     * @param {boolean} [createSeedFileIfNotExist=false] - create seed file if it doesnn't exist
      */
-    generateSeed(pathToFile, wordLength = 15, showSeed = false) {
-        this.setSeedPhraseFilePath(pathToFile);
+    generateSeed(pathToFile, wordLength = 15, showSeed = false, createSeedFileIfNotExist = true) {
+        this.setSeedPhraseFilePath(pathToFile, createSeedFileIfNotExist);
         console.info('Generating Seed File...');
         if (isNil(this.pathToFile)) {
             throw new Error('File Path not specified!');
