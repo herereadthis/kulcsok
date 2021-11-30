@@ -35,7 +35,6 @@ module.exports = class SeedPassword {
      * @param {SeedPasswordOptions} options - configuration
      */
     constructor(options = {}) {
-        console.log('\n*******\n');
         const pathToFile = isNil(options.pathToFile) ? SEED_PATH : options.pathToFile;
         const hashLength = isNil(options.hashLength) ? SHA3_HASH_LENGTH : options.hashLength;
         const createSeedFileIfNotExist = isNil(options.createSeedFileIfNotExist) ? true : options.createSeedFileIfNotExist;
@@ -104,7 +103,7 @@ module.exports = class SeedPassword {
     setSeedPhraseFilePath(pathToFile, createIfNotExist = true) {
         if (!fs.existsSync(pathToFile) && !createIfNotExist) {
             throw new Error('cannot find seed file at path');
-        } else if (createIfNotExist) {
+        } else if (!fs.existsSync(pathToFile) && createIfNotExist) {
             try{
                 fs.writeFileSync(pathToFile, SeedPassword.getBip39Mnemonic(15));
             }catch (err){

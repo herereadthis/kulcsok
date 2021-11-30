@@ -7,11 +7,9 @@ const SeedPassword = require('../src/classes/seed-password');
 const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
 
 describe('SeedPassword', () => {
-    describe.only('constructor', () => {
+    describe('constructor', () => {
         it('have set defaults', () => {
             const seedPassword = new SeedPassword();
-            // console.log(seedPassword.seedPhrase);
-            // console.log(seedPassword.hashLength);
             expect(seedPassword.hashLength).to.equal(SHA3_HASH_LENGTH);
             // expect(seedPassword.encoding).to.equal('utf8');
         });
@@ -70,13 +68,8 @@ describe('SeedPassword', () => {
     });
 
     describe('setSeedPhraseFilePath()', () => {
-        let seedPassword;
-
-        beforeEach(() => {
-            seedPassword = new SeedPassword();
-        });
-
         it('sets path', () => {
+            const seedPassword = new SeedPassword();
             seedPassword.setSeedPhraseFilePath('./index.js');
             // expect(() => {
             //     seedPassword.setSeedPhrase(' spaces ');
@@ -85,8 +78,9 @@ describe('SeedPassword', () => {
         });
 
         it('throws error on missing file', () => {
+            const seedPassword = new SeedPassword({createSeedFileIfNotExist: false});
             expect(() => {
-                seedPassword.setSeedPhraseFilePath('foo.js');
+                seedPassword.setSeedPhraseFilePath('foo.js', false);
             }).to.throw(Error);
         });
     });
