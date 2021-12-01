@@ -30,7 +30,9 @@ if (argv.demo) {
         seedPassword.writeSeedFile();
     }
 } else {
-    seedPassword.setSeedPhraseFromFile(SEED_PATH);
+    const seedPassword = new SeedPassword();
+    seedPassword.setSeedPhraseFromFile();
+    hash = seedPassword.hash;
 }
 
 console.log('\nhash');

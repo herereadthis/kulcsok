@@ -201,9 +201,10 @@ module.exports = class SeedPassword {
         }
 
         const mnemonic = SeedPassword.getBip39Mnemonic(wordLength);
+        this.seedPhrase = mnemonic;
 
         try {
-            fs.writeFileSync(this.pathToFile, mnemonic);
+            fs.writeFileSync(this.pathToFile, this.seedPhrase);
             console.info(`Created seed file at: ${this.pathToFile}`);
         } catch (err) {
             console.error(err);
@@ -224,6 +225,7 @@ module.exports = class SeedPassword {
      * @returns {string} hash
      */
     get hash() {
+        console.log(`seedphrase is <${this.seedPhrase}>`);
         return CryptoJS.SHA3(this.seedPhrase, {outputLength: this.hashLength}).toString();
     }
 };

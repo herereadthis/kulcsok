@@ -23,17 +23,18 @@ keypairs, use npm [elliptic](https://www.npmjs.com/package/elliptic).
 // demo to see it in action. It will use ./secrets/secret-demo.txt
 npm run password:demo
 
-// Create a new file at ./secrets/seed.txt
-// seed.txt will be ignored via .gitignore
-// Paste your seed phrase into that file.
-npm run password
-
-// If you are looking to generate a password from scratch
-// Note: this will wipe any currently existing seed.txt file.
+// Generate a brand new password. Seed phrase is stored in seed.txt, which is
+// ignored via .gitignore
 npm run password:new
 
-// Otherwise, pass the seed phrase as an argument
+// Retrieve the password based on stored seed file. Idempotent as long as seed
+// file does not change
+npm run password
+
+// Otherwise, pass the seed phrase as an argument.
+// This manual operation will not save the seed phrase to file.
 npm run password 'my secret phrase has many words'
+
 // Overwrite seed.txt file if you want to store the seed phrase
 npm run password -- 'my secret phrase has many words' --overwrite
 ```
