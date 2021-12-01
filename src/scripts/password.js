@@ -12,12 +12,16 @@ const BIP39_WORD_LENGTH = config.get('bip39_word_length');
 
 const {argv} = yargs(hideBin(process.argv));
 
-const seedPassword = new SeedPassword();
+let hash;
 
 if (argv.demo) {
-    seedPassword.setSeedPhraseFromFile(SEED_DEMO_PATH);
+    const seedPassword = new SeedPassword({pathToFile: SEED_DEMO_PATH});
+    seedPassword.setSeedPhraseFromFile();
+    hash = seedPassword.hash;
 } else if (argv.new) {
-    seedPassword.generateSeed(SEED_PATH, BIP39_WORD_LENGTH);
+    const seedPassword = new SeedPassword();
+    seedPassword.writeNewSeed();
+    hash = seedPassword.hash;
 } else if (!isNil(process.argv[2])) {
     console.log(process.argv[2]);
     console.log(argv.overwrite);
@@ -30,5 +34,5 @@ if (argv.demo) {
 }
 
 console.log('\nhash');
-console.log(seedPassword.hash);
+console.log(hash);
 console.log('hash\n');

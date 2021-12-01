@@ -14,6 +14,7 @@ const {isNil, isEmpty, isString, isFinite} = require('lodash');
 /** @constant {string} SEED_PATH - default path to store seed phrase in file */
 const SEED_PATH = config.get('file_paths.seed');
 const SHA3_HASH_LENGTH = config.get('seed_password.sha3_hash_length');
+const BIP39_WORD_LENGTH = config.get('bip39_word_length');
 
 /**
  * @class module:SeedPassword.SeedPassword
@@ -26,6 +27,7 @@ module.exports = class SeedPassword {
     /**
      * @typedef {object} [SeedPasswordOptions={}]
      * @property {string} [pathToFile] - file path
+     * @property {number} [wordLength] - word count of the bip39 seed mnemonic
      * @property {number} [hashLength] - value for SHA3 encryption
      * @property {boolean} [reateSeedFileIfNotExist] - create a file if necessary
      */
@@ -35,18 +37,19 @@ module.exports = class SeedPassword {
      * @param {SeedPasswordOptions} options - configuration
      */
     constructor(options = {}) {
-        const pathToFile = isNil(options.pathToFile) ? SEED_PATH : options.pathToFile;
+        this.wordLength = isNil(options.wordLength) ? BIP39_WORD_LENGTH : options.wordLength;
+        this.createSeedFileIfNotExist = isNil(options.createSeedFileIfNotExist) ? true : options.createSeedFileIfNotExist;
+        
         const hashLength = isNil(options.hashLength) ? SHA3_HASH_LENGTH : options.hashLength;
-        const createSeedFileIfNotExist = isNil(options.createSeedFileIfNotExist) ? true : options.createSeedFileIfNotExist;
+        const pathToFile = isNil(options.pathToFile) ? SEED_PATH : options.pathToFile;
 
         this.encoding = 'utf8';
         this.seedPhrase = null;
-        this.setHashLength(hashLength);
+        this.hashLength = null;
         this.pathToFile = null;
-
-        if (!isNil(pathToFile)) {
-            this.setSeedPhraseFromFile(pathToFile, createSeedFileIfNotExist);
-        }
+        
+        this.setHashLength(hashLength);
+        this.setSeedPhraseFilePath(pathToFile);
     }
 
     /**
@@ -58,7 +61,7 @@ module.exports = class SeedPassword {
      * @param {number} wordLength - how many words in generated seed phrase
      * @returns {string} seedPhrase - a phrase for generating passwords
      */
-    static getBip39Mnemonic(wordLength = 12) {
+    static getBip39Mnemonic(wordLength = BIP39_WORD_LENGTH) {
         const allowed = [12, 15, 18, 21, 24];
 
         if (!isFinite(wordLength)) {
@@ -100,28 +103,47 @@ module.exports = class SeedPassword {
         return seedPhase.split('\n')[0].trim();
     }
 
-    setSeedPhraseFilePath(pathToFile, createIfNotExist = true) {
-        if (!fs.existsSync(pathToFile) && !createIfNotExist) {
+    setSeedPhraseFilePath(pathToFile) {
+        if (!fs.existsSync(pathToFile) && !this.createIfNotExist) {
             throw new Error('cannot find seed file at path');
-        } else if (!fs.existsSync(pathToFile) && createIfNotExist) {
+        } else if (!fs.existsSync(pathToFile) && this.createIfNotExist) {
             try{
-                fs.writeFileSync(pathToFile, SeedPassword.getBip39Mnemonic(15));
-            }catch (err){
+                fs.writeFileSync(pathToFile);
+            } catch (err){
                 throw new Error('Cannot write new seed file');
             }
         }
         this.pathToFile = pathToFile;
     }
 
-    setSeedPhraseFromFile(pathToFile, createSeedFileIfNotExist) {
-        if (!isNil(pathToFile)) {
-            this.setSeedPhraseFilePath(pathToFile, createSeedFileIfNotExist);
+    /**
+     * Set the seedPhrase of the SeedPassword instance
+     * 
+     * @param {string} seedPhrase - a phrase for generating passwords
+     */
+    setSeedManualPhrase(seedPhrase) {
+        if (isEmpty(seedPhrase)) {
+            throw new TypeError('Cannot set empty seed phrase.');
         }
+        if (!isString(seedPhrase)) {
+            throw new TypeError('Seed Phrase must be a string.');
+        }
+        if (SeedPassword.getSanitizedSeedPhrase(seedPhrase) !== seedPhrase) {
+            throw new Error('Seed Phrase must not include line breaks or beginning or ending spaces.');
+        }
+        this.seedPhrase = seedPhrase;
+    }
+
+    setSeedPhraseFromFile() {
+        if (isNil(this.pathToFile)) {
+            throw new Error('Must specify file before setting seed phrase from file');
+        }
+
         try {
             let rawdata = fs.readFileSync(this.pathToFile, {encoding: this.encoding, flag: 'r'});
             // Only get first line of txt file
             // trim beginning and ending of seed phrase
-            this.setSeedPhrase(SeedPassword.getSanitizedSeedPhrase(rawdata));
+            this.seedPhrase = SeedPassword.getSanitizedSeedPhrase(rawdata);
         } catch (err) {
             console.error(err);
         }
@@ -159,6 +181,7 @@ module.exports = class SeedPassword {
         if (showSeed) {
             console.info(mnemonic);
         }
+
         this.setSeedPhrase(mnemonic);
         this.writeSeedFile(mnemonic);
     }
@@ -166,6 +189,21 @@ module.exports = class SeedPassword {
     writeSeedFile() {
         try {
             fs.writeFileSync(this.pathToFile, this.seedPhrase);
+            console.info(`Created seed file at: ${this.pathToFile}`);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    writeNewSeed(wordLength = this.wordLength) {
+        if (isNil(this.pathToFile)) {
+            throw new Error('Must specify file before setting seed phrase from file');
+        }
+
+        const mnemonic = SeedPassword.getBip39Mnemonic(wordLength);
+
+        try {
+            fs.writeFileSync(this.pathToFile, mnemonic);
             console.info(`Created seed file at: ${this.pathToFile}`);
         } catch (err) {
             console.error(err);
@@ -180,24 +218,6 @@ module.exports = class SeedPassword {
      */
     validateBip39Mnemonic(mnemonic) {
         return bip39.validateMnemonic(mnemonic);
-    }
-
-    /**
-     * Set the seedPhrase of the SeedPassword instance
-     * 
-     * @param {string} seedPhrase - a phrase for generating passwords
-     */
-    setSeedPhrase(seedPhrase) {
-        if (isEmpty(seedPhrase)) {
-            throw new TypeError('Cannot set empty seed phrase.');
-        }
-        if (!isString(seedPhrase)) {
-            throw new TypeError('Seed Phrase must be a string.');
-        }
-        if (SeedPassword.getSanitizedSeedPhrase(seedPhrase) !== seedPhrase) {
-            throw new Error('Seed Phrase must not include line breaks or beginning or ending spaces.');
-        }
-        this.seedPhrase = seedPhrase;
     }
 
     /**
