@@ -121,7 +121,7 @@ module.exports = class SeedPassword {
      * 
      * @param {string} seedPhrase - a phrase for generating passwords
      */
-    setSeedManualPhrase(seedPhrase) {
+    setSeedPhraseManually(seedPhrase) {
         if (isEmpty(seedPhrase)) {
             throw new TypeError('Cannot set empty seed phrase.');
         }
@@ -178,9 +178,6 @@ module.exports = class SeedPassword {
             throw new Error('File Path not specified!');
         }
         const mnemonic = SeedPassword.getBip39Mnemonic(wordLength);
-        if (showSeed) {
-            console.info(mnemonic);
-        }
 
         this.setSeedPhrase(mnemonic);
         this.writeSeedFile(mnemonic);
@@ -225,7 +222,6 @@ module.exports = class SeedPassword {
      * @returns {string} hash
      */
     get hash() {
-        console.log(`seedphrase is <${this.seedPhrase}>`);
         return CryptoJS.SHA3(this.seedPhrase, {outputLength: this.hashLength}).toString();
     }
 };

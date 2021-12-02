@@ -36,7 +36,7 @@ npm run password
 npm run password 'my secret phrase has many words'
 
 // Overwrite seed.txt file if you want to store the seed phrase
-npm run password -- 'my secret phrase has many words' --overwrite
+npm run password 'my secret phrase has many words' --overwrite
 ```
 
 **Why not just use `bip39` to generate hashes?** While everything here is a NodeJS app, it should not have to be. The
