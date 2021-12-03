@@ -25,7 +25,8 @@ const BUILD_PATH = config.get('file_paths.build');
 const {argv} = yargs(hideBin(process.argv));
 
 if (argv.demo) {
-    const seedPassword = new SeedPassword(SEED_DEMO_PATH);
+    const seedPassword = new SeedPassword({pathToFile: SEED_DEMO_PATH});
+    seedPassword.setSeedPhraseFromFile();
 
     // const options = {encoding:'utf8', flag:'r'};
     // const parsedSource = fs.readFileSync(SECRET_ENCRYPTED_PATH, options);

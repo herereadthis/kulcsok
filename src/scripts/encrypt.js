@@ -48,6 +48,7 @@ if (argv.demo) {
 function runDemoScript() {
     console.info(chalk.magenta('Running Encrypt (demo)...'));
     const seedPassword = new SeedPassword({pathToFile: SEED_DEMO_PATH});
+    seedPassword.setSeedPhraseFromFile();
 
     const encryptor = new Encryptor(seedPassword.hash, SECRET_DEMO_PATH);
     const timestampDirectory = encryptor.timestampDirectory;

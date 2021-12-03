@@ -161,28 +161,6 @@ module.exports = class SeedPassword {
         this.hashLength = hashLength;
     }
 
-    /**
-     * Generate a seed and save to file
-     * 
-     * @public
-     * @function module:SeedPassword#generateSeed
-     * @param {string} pathToFile - location of file to seed phrase
-     * @param {number} [wordLength=15] length of mnemonic
-     * @param {boolean} [showSeed=false] - whether to diplay in console
-     * @param {boolean} [createSeedFileIfNotExist=false] - create seed file if it doesnn't exist
-     */
-    generateSeed(pathToFile, wordLength = 15, showSeed = false, createSeedFileIfNotExist = true) {
-        this.setSeedPhraseFilePath(pathToFile, createSeedFileIfNotExist);
-        console.info('Generating Seed File...');
-        if (isNil(this.pathToFile)) {
-            throw new Error('File Path not specified!');
-        }
-        const mnemonic = SeedPassword.getBip39Mnemonic(wordLength);
-
-        this.setSeedPhrase(mnemonic);
-        this.writeSeedFile(mnemonic);
-    }
-
     writeSeedFile() {
         try {
             fs.writeFileSync(this.pathToFile, this.seedPhrase);
@@ -192,6 +170,13 @@ module.exports = class SeedPassword {
         }
     }
 
+    /**
+     * Write new seed to file
+     * 
+     * @public
+     * @function module:SeedPassword#writeNewSeed
+     * @param {number} [wordLength=15] length of mnemonic
+     */
     writeNewSeed(wordLength = this.wordLength) {
         if (isNil(this.pathToFile)) {
             throw new Error('Must specify file before setting seed phrase from file');

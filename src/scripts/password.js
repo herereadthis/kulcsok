@@ -7,8 +7,6 @@ const {hideBin} = require('yargs/helpers');
 const SeedPassword = require('./../classes/seed-password');
 
 const SEED_DEMO_PATH = config.get('file_paths.seed_demo');
-const SEED_PATH = config.get('file_paths.seed');
-const BIP39_WORD_LENGTH = config.get('bip39_word_length');
 
 const {argv} = yargs(hideBin(process.argv));
 
