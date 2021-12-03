@@ -15,7 +15,7 @@ describe('SeedPassword', () => {
         });
     });
 
-    describe.skip('SeedPassword.getSanitizedSeedPhrase()', () => {
+    describe('SeedPassword.getSanitizedSeedPhrase()', () => {
         it('strips spaces', () => {
             const phrase = 'lorem ipsum';
             const paddedPhrase = ` ${phrase} `;
@@ -24,7 +24,7 @@ describe('SeedPassword', () => {
         });
     });
 
-    describe.skip('setSeedPhrase()', () => {
+    describe('setSeedPhrase()', () => {
         let seedPassword;
 
         beforeEach(() => {
@@ -34,7 +34,7 @@ describe('SeedPassword', () => {
         it('sets seed phrase', () => {
             const seedPhrase = 'lorem ipsum sit dolor amet';
 
-            seedPassword.setSeedPhrase(seedPhrase);
+            seedPassword.setSeedPhraseManually(seedPhrase);
 
             expect(seedPassword.seedPhrase).to.equal(seedPhrase);
         });

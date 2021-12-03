@@ -104,14 +104,11 @@ module.exports = class SeedPassword {
     }
 
     setSeedPhraseFilePath(pathToFile) {
-        if (!fs.existsSync(pathToFile) && !this.createIfNotExist) {
+        if (!fs.existsSync(pathToFile) && !this.createSeedFileIfNotExist) {
             throw new Error('cannot find seed file at path');
-        } else if (!fs.existsSync(pathToFile) && this.createIfNotExist) {
-            try{
-                fs.writeFileSync(pathToFile);
-            } catch (err){
-                throw new Error('Cannot write new seed file');
-            }
+        } else if (!fs.existsSync(pathToFile) && this.createSeedFileIfNotExist) {
+            console.log(`file does not exist. create new one at <${pathToFile}>`);
+            fs.writeFileSync(pathToFile, '');
         }
         this.pathToFile = pathToFile;
     }
@@ -119,6 +116,8 @@ module.exports = class SeedPassword {
     /**
      * Set the seedPhrase of the SeedPassword instance
      * 
+     * @public
+     * @function module:SeedPassword#setSeedPhraseManually
      * @param {string} seedPhrase - a phrase for generating passwords
      */
     setSeedPhraseManually(seedPhrase) {
@@ -134,19 +133,22 @@ module.exports = class SeedPassword {
         this.seedPhrase = seedPhrase;
     }
 
+    /**
+     * Set the seedPhrase of the SeedPassword instance
+     * 
+     * @public
+     * @function module:SeedPassword#setSeedPhraseFromFile
+     */
     setSeedPhraseFromFile() {
         if (isNil(this.pathToFile)) {
             throw new Error('Must specify file before setting seed phrase from file');
         }
 
-        try {
-            let rawdata = fs.readFileSync(this.pathToFile, {encoding: this.encoding, flag: 'r'});
-            // Only get first line of txt file
-            // trim beginning and ending of seed phrase
-            this.seedPhrase = SeedPassword.getSanitizedSeedPhrase(rawdata);
-        } catch (err) {
-            console.error(err);
-        }
+
+        let rawdata = fs.readFileSync(this.pathToFile, {encoding: this.encoding, flag: 'r'});
+        // Only get first line of txt file
+        // trim beginning and ending of seed phrase
+        this.seedPhrase = SeedPassword.getSanitizedSeedPhrase(rawdata);
     }
 
     setHashLength(hashLength) {
@@ -162,12 +164,8 @@ module.exports = class SeedPassword {
     }
 
     writeSeedFile() {
-        try {
-            fs.writeFileSync(this.pathToFile, this.seedPhrase);
-            console.info(`Created seed file at: ${this.pathToFile}`);
-        } catch (err) {
-            console.error(err);
-        }
+        fs.writeFileSync(this.pathToFile, this.seedPhrase);
+        console.info(`Created seed file at: ${this.pathToFile}`);
     }
 
     /**
@@ -185,12 +183,7 @@ module.exports = class SeedPassword {
         const mnemonic = SeedPassword.getBip39Mnemonic(wordLength);
         this.seedPhrase = mnemonic;
 
-        try {
-            fs.writeFileSync(this.pathToFile, this.seedPhrase);
-            console.info(`Created seed file at: ${this.pathToFile}`);
-        } catch (err) {
-            console.error(err);
-        }
+        fs.writeFileSync(this.pathToFile, this.seedPhrase);
     }
 
     /**
