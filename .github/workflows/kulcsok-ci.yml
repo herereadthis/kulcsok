@@ -93,26 +93,26 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-  Fun:
-    needs: [build, the-time]
-    runs-on: ubuntu-latest
-    steps:
+  # Fun:
+  #   needs: [build, the-time]
+  #   runs-on: ubuntu-latest
+  #   steps:
       # - name: github hello world1
       #   uses: actions/hello-world-javascript-action@main
       #   with:
       #     who-to-greet: 'Mona the Octocat'
-      - uses: actions/checkout@v2
-      - name: install node on foo action
-        run: |
-          cd ./.github/actions/foo
-          npm ci
-      - name: run foo action
-        uses: ./.github/actions/foo
-        with:
-          who-to-greet: 'foo'
-          branch: ${{ github.ref }}
-      - name: get tag name again ${{needs.the-time.outputs.tag-name}}
-        run: echo ${{needs.the-time.outputs.tag-name}}
+      # - uses: actions/checkout@v2
+      # - name: install node on foo action
+      #   run: |
+      #     cd ./.github/actions/foo
+      #     npm ci
+      # - name: run foo action
+      #   uses: ./.github/actions/foo
+      #   with:
+      #     who-to-greet: 'foo'
+      #     branch: ${{ github.ref }}
+      # - name: get tag name again ${{needs.the-time.outputs.tag-name}}
+      #   run: echo ${{needs.the-time.outputs.tag-name}}
 
 
 #on:
