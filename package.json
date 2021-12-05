@@ -1,6 +1,6 @@
 {
   "name": "kulcsok",
-  "version": "1.0.0",
+  "version": "1.1.23",
   "description": "encryption and decryption",
   "main": "index.js",
   "scripts": {
