@@ -21,15 +21,17 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # gimme-context:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Dump GitHub context
-  #       env:
-  #         GITHUB_CONTEXT: ${{ toJSON(github) }}
-  #       run: echo "$GITHUB_CONTEXT"
-      # - name: What is actor
-      #   run: echo ${{ github.actor }}
+  gimme-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Dump secrets
+        env:
+          SECRETS: ${{ toJSON(secrets) }}
+        run: echo "$SECRETS"
   bump:
     name: 'Bump Version'
     # The type of runner that the job will run on
@@ -63,4 +65,5 @@ jobs:
         # uses: herereadthis/guosim@v1.0
         with:
           version: ${{ github.event.inputs.version }}
-          base_branch: ${{ github.event.inputs.base_branch }}
+          base-branch: ${{ github.event.inputs.base_branch }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
