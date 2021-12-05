@@ -21,13 +21,13 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  gimme-context:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
+  # gimme-context:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Dump GitHub context
+  #       env:
+  #         GITHUB_CONTEXT: ${{ toJSON(github) }}
+  #       run: echo "$GITHUB_CONTEXT"
       # - name: What is actor
       #   run: echo ${{ github.actor }}
   bump:
@@ -36,24 +36,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: Use Node.js 14
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-          cache: 'npm'
+      # - name: checkout
+      #   uses: actions/checkout@v2
+      # - name: Use Node.js 14
+      #   uses: actions/setup-node@v2
+      #   with:
+      #     node-version: 14
+      #     cache: 'npm'
       # - name: List files in the repository
       #   run: |
       #     ls ${{ github.workspace }}
       # - name: Send greeting
       #   run: echo "Hello ${{ github.event.inputs.version }}"
-      - name: do node stuff
-        run: |
-          git checkout master
-          git checkout -b bump-version-${{ github.event.inputs.version }}
-          git push origin bump-version-${{ github.event.inputs.version }}
-      - uses: actions/checkout@v2
+      # - name: do node stuff
+      #   run: |
+      #     git checkout master
+      #     git checkout -b bump-version-${{ github.event.inputs.version }}
+      #     git push origin bump-version-${{ github.event.inputs.version }}
+      # - uses: actions/checkout@v2
       # - name: install node on bump action
       #   run: |
       #     cd ./.github/actions/bump
