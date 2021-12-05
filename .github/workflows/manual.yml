@@ -53,14 +53,14 @@ jobs:
       #     git checkout master
       #     git checkout -b bump-version-${{ github.event.inputs.version }}
       #     git push origin bump-version-${{ github.event.inputs.version }}
-      # - uses: actions/checkout@v2
-      # - name: install node on bump action
-      #   run: |
-      #     cd ./.github/actions/bump
-      #     npm ci
+      - uses: actions/checkout@v2
+      - name: install node on bump action
+        run: |
+          cd ./.github/actions/bump
+          npm ci
       - name: run bump action
-        # uses: ./.github/actions/bump
-        uses: herereadthis/guosim@v1.0
+        uses: ./.github/actions/bump
+        # uses: herereadthis/guosim@v1.0
         with:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
