@@ -9,8 +9,8 @@ const git = simpleGit();
 shell.config.verbose = true;
 
 const versionNumber = core.getInput('version');
-const baseBranch = core.getInput('base-branch');
-const repoToken = core.getInput('repo-token');
+const baseBranch = core.getInput('base_branch');
+const repoToken = core.getInput('repo_token');
 
 const actor = github.context.actor;
 const email = `${actor}@email.com`;
