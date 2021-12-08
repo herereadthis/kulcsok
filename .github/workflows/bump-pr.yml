@@ -1,7 +1,7 @@
 name: Bump Version PR
 
 on:
-  push
+  create
 
 jobs:
   gimme-context:
