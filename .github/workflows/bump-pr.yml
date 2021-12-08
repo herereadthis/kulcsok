@@ -1,0 +1,21 @@
+name: Bump Version PR
+
+on:
+  push:
+    branches:
+      - bump-version-**
+
+jobs:
+  gimme-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+  pr:
+    name: Generate Bump PR
+    steps:
+      - name: pull request
+        run: |
+          gh pr create --title "The bug is fixed" --body "Everything works again"
