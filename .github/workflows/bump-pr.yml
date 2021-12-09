@@ -1,12 +1,14 @@
-name: Bump Version PR
+name: Bump Version PR 2
 
 on:
-  create
+  push
 
 jobs:
   gimme-context:
     name: test for future bump
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  
+    # if: github.ref == 'refs/heads/bump-version**'
+    if: contains(github.ref, 'bump-version')
     steps:
       - name: Dump GitHub context
         env:
@@ -18,3 +20,4 @@ jobs:
   #     - name: pull request
   #       run: |
   #         gh pr create --title "The bug is fixed" --body "Everything works again"
+  # meaningless
