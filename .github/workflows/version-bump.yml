@@ -33,7 +33,6 @@ jobs:
     name: 'Bump Version'
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: install node on bump action
@@ -47,12 +46,11 @@ jobs:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+  push:
+    name: 'Push Bump Branch'
+    needs: [bump]
+    runs-on: ubuntu-latest
+    steps:
       - name: list local branches
         run: |
           git branch
-      - name: list remote branches
-        run: |
-          git branch -r
-      - name: list all branches
-        run: |
-          git branch -a
