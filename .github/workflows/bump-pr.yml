@@ -1,4 +1,4 @@
-name: Bump Version PR 2
+name: Bump Version PR
 
 on:
   push
