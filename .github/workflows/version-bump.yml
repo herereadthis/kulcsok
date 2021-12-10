@@ -51,9 +51,6 @@ jobs:
     needs: [bump]
     runs-on: ubuntu-latest
     steps:
-      - name: list local branches
-        run: |
-          git branch
       - uses: actions/checkout@v2
       - name: install node on push action
         run: |
