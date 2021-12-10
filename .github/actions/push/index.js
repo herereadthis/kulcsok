@@ -44,6 +44,7 @@ const configure = async () => {
             .addConfig('author.name', actor)
             .addConfig('committer.email', email)
             .addConfig('committer.name', actor)
+            .fetch('origin')
             .checkout(newBranch);
         shell.exec(`
             gh pr create --base ${baseBranch} --title "Bump version ${versionNumber}" --body "new version bump ${versionNumber}"
