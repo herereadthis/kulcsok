@@ -51,5 +51,6 @@ const configure = async () => {
     } catch (err) {
         throw err;
     }
+};
 
 configure();

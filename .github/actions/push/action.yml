@@ -1,5 +1,5 @@
-name: 'Bump Version'
-description: 'Bump the version number of the repo'
+name: 'Push Bump Branch'
+description: 'Create a Bump Pull request'
 inputs:
   base_branch:
     description: 'Base Branch'
