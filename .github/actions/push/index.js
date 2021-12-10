@@ -44,20 +44,12 @@ const configure = async () => {
             .addConfig('author.name', actor)
             .addConfig('committer.email', email)
             .addConfig('committer.name', actor)
-            .checkoutBranch(newBranch, baseBranch);
-
-        shell.exec(`npm version ${versionNumber} --no-git-tag-version`);
-
-        await git
-            .add('package.json')
-            .add('package-lock.json')
-            .commit(`Bump version ${versionNumber}`)
-            .push('origin', newBranch);
-
-        console.log(`Pushed branch ${newBranch}`);
+            .checkout(newBranch);
+        shell.exec(`
+            gh pr create --base ${baseBranch} --title "Bump version ${versionNumber}" --body "new version bump ${versionNumber}"
+        `);
     } catch (err) {
         throw err;
     }
-};
 
 configure();

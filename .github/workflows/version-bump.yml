@@ -54,3 +54,14 @@ jobs:
       - name: list local branches
         run: |
           git branch
+      - uses: actions/checkout@v2
+      - name: install node on push action
+        run: |
+          cd ./.github/actions/push
+          npm ci
+      - name: run push action
+        uses: ./.github/actions/push
+        with:
+          version: ${{ github.event.inputs.version }}
+          base_branch: ${{ github.event.inputs.base_branch }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
