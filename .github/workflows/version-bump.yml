@@ -11,9 +11,6 @@ on:
         required: false
       version:
         description: 'Version Number'
-        # Default value if no value is explicitly provided
-        # default: null
-        # Input has to be provided for the workflow to run
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -57,11 +54,11 @@ jobs:
       - name: list variables
         run: |
           echo "$BRANCH_NAME"
-          echo "BASE_BRANCH"
+          echo "$BASE_BRANCH"
         env:
           BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      - name: what is the branch?
+      - name: checkout branch
         run: |
           git fetch origin
           git branch
@@ -69,23 +66,8 @@ jobs:
         env:
           BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - run: gh pr create --base ${{ github.event.inputs.base_branch }} --title "Bump version ${versionNumber}" --body "new version bump ${versionNumber}"
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     ISSUE: ${{ github.event.issue.html_url }}
-  # push:
-  #   name: 'Push Bump Branch'
-  #   needs: [bump]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: install node on push action
-  #       run: |
-  #         cd ./.github/actions/push
-  #         npm ci
-  #     - name: run push action
-  #       uses: ./.github/actions/push
-  #       with:
-  #         version: ${{ github.event.inputs.version }}
-  #         base_branch: ${{ github.event.inputs.base_branch }}
-  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
