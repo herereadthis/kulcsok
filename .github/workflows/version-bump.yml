@@ -47,18 +47,29 @@ jobs:
           base_branch: ${{ github.event.inputs.base_branch }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
   push:
-    name: 'Push Bump Branch'
     needs: [bump]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: install node on push action
+      - name: what is the branch?
         run: |
-          cd ./.github/actions/push
-          npm ci
-      - name: run push action
-        uses: ./.github/actions/push
-        with:
-          version: ${{ github.event.inputs.version }}
-          base_branch: ${{ github.event.inputs.base_branch }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          git branch
+      # - run: gh pr create --base ${{ github.event.inputs.base_branch }} --title "Bump version ${versionNumber}" --body "new version bump ${versionNumber}"
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     ISSUE: ${{ github.event.issue.html_url }}
+  # push:
+  #   name: 'Push Bump Branch'
+  #   needs: [bump]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: install node on push action
+  #       run: |
+  #         cd ./.github/actions/push
+  #         npm ci
+  #     - name: run push action
+  #       uses: ./.github/actions/push
+  #       with:
+  #         version: ${{ github.event.inputs.version }}
+  #         base_branch: ${{ github.event.inputs.base_branch }}
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
