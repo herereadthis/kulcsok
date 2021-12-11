@@ -54,13 +54,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: list variables
+        run: |
+          echo "$BRANCH_NAME"
+          echo "BASE_BRANCH"
+        env:
+          BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
       - name: what is the branch?
         run: |
           git fetch origin
           git branch
           git checkout $BRANCH_NAME
         env:
-          BRANCH_NAME: bump-version-${{ github.event.inputs.base_branch }}
+          BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
       # - run: gh pr create --base ${{ github.event.inputs.base_branch }} --title "Bump version ${versionNumber}" --body "new version bump ${versionNumber}"
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
