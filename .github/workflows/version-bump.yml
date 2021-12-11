@@ -46,10 +46,14 @@ jobs:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: what is the branch?
+        run: |
+          git branch
   push:
     needs: [bump]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: what is the branch?
         run: |
           git branch
