@@ -19,11 +19,11 @@ const getNewVersion = () => {
     const packageValues = packageVersion.split('.');
 
     if (version === 'major') {
-        packageValues[0] = packageValues[0] + 1;
+        packageValues[0] = parseInt(packageValues[0]) + 1;
     } else if (version === 'minor') {
-        packageValues[1] = packageValues[1] + 1;
+        packageValues[1] = parseInt(packageValues[1]) + 1;
     } else {
-        packageValues[2] = packageValues[2] + 1;
+        packageValues[2] = parseInt(packageValues[2]) + 1;
     }
 
     return packageValues.join('.');

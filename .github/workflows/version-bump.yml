@@ -73,17 +73,27 @@ jobs:
         run: |
           git fetch origin
           git branch
-          git checkout $BRANCH_NAME
+          git checkout $NEW_BRANCH
+          git branch
         env:
           NEW_BRANCH: ${{needs.bump.outputs.new_branch}}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      - name: create pull request
-        run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
-        env:
-          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-          TITLE: Bump Version ${{ github.event.inputs.version }}
-          BODY: New version bump ${{ github.event.inputs.version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: output of bump job
+      - name: Get Outputs
         run: |
-          echo "${{needs.bump.outputs.new_branch}}"
+          echo "The version number is $NEW_VERSION_NUMBER"
+          echo "The bump branch is $NEW_BRANCH"
+          echo "The base branch is $BASE_BRANCH"
+        env:
+          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+          NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+      # - name: create pull request
+      #   run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
+      #   env:
+      #     BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+      #     TITLE: Bump Version ${{ github.event.inputs.version }}
+      #     BODY: New version bump ${{ github.event.inputs.version }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: output of bump job
+      #   run: |
+      #     echo "${{needs.bump.outputs.new_branch}}"
