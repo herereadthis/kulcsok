@@ -10,7 +10,12 @@ on:
         default: 'master'
         required: false
       version:
-        description: 'Version Number'
+        type: choice
+        description: Version
+        options: 
+          - major
+          - minor
+          - patch
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -24,10 +29,10 @@ jobs:
         run: echo "$GITHUB_CONTEXT"
   bump:
     name: 'Bump Version'
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
     outputs:
-      newBranch: ${{ steps.bump_action.outputs.newBranch }}"
+      new_branch: ${{ steps.bump_action.outputs.new_branch }}
+      new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
     steps:
       - uses: actions/checkout@v2
       - name: install node on bump action
@@ -41,11 +46,22 @@ jobs:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: what is the branch?
+      - name: Get Outputs
+        run: |
+          echo "The version number is $NEW_VERSION_NUMBER"
+          echo "The bump branch is $NEW_BRANCH"
+        env:
+          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+          NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}
+      - name: Commit and Push
         run: |
           git branch
-      - name: Get the output branch
-        run: echo "The bump branch is ${{ steps.bump_action.outputs.newBranch }}"
+          git commit -am "Bump Version $NEW_VERSION_NUMBER"
+          git push origin $NEW_BRANCH
+        env:
+          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+          NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   push:
     needs: [bump]
     runs-on: ubuntu-latest
@@ -57,15 +73,15 @@ jobs:
           git branch
           git checkout $BRANCH_NAME
         env:
-          BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
+          NEW_BRANCH: ${{needs.bump.outputs.new_branch}}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      # - name: create pull request
-      #   run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
-      #   env:
-      #     BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      #     TITLE: Bump Version ${{ github.event.inputs.version }}
-      #     BODY: New version bump ${{ github.event.inputs.version }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: create pull request
+        run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
+        env:
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          TITLE: Bump Version ${{ github.event.inputs.version }}
+          BODY: New version bump ${{ github.event.inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: output of bump job
         run: |
-          echo ${{needs.bump.outputs.newBranch}}
+          echo "${{needs.bump.outputs.new_branch}}"

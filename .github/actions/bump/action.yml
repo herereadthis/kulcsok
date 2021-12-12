@@ -11,8 +11,10 @@ inputs:
     description: 'Repo Token'
     required: false
 outputs:
-  newBranch:
+  new_branch:
     description: 'Bump Branch'
+  new_version_number:
+    description: 'New Version Number'
 runs:
   using: 'node12'
   main: 'index.js'
