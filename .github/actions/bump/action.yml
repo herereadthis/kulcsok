@@ -10,9 +10,9 @@ inputs:
   repo_token:
     description: 'Repo Token'
     required: false
-# outputs:
-#   time: # id of output
-#     description: 'The time we greeted you'
+outputs:
+  newBranch:
+    description: 'Bump Branch'
 runs:
   using: 'node12'
   main: 'index.js'

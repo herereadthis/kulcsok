@@ -22,14 +22,12 @@ jobs:
         env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: echo "$GITHUB_CONTEXT"
-      # - name: Dump secrets
-      #   env:
-      #     SECRETS: ${{ toJSON(secrets) }}
-      #   run: echo "$SECRETS"
   bump:
     name: 'Bump Version'
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    outputs:
+      newBranch: ${{ steps.bump_action.outputs.newBranch }}"
     steps:
       - uses: actions/checkout@v2
       - name: install node on bump action
@@ -38,7 +36,7 @@ jobs:
           npm ci
       - name: run bump action
         uses: ./.github/actions/bump
-        # uses: herereadthis/guosim@v1.0
+        id: bump_action
         with:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
@@ -46,6 +44,8 @@ jobs:
       - name: what is the branch?
         run: |
           git branch
+      - name: Get the output branch
+        run: echo "The bump branch is ${{ steps.bump_action.outputs.newBranch }}"
   push:
     needs: [bump]
     runs-on: ubuntu-latest
@@ -59,10 +59,13 @@ jobs:
         env:
           BRANCH_NAME: bump-version-${{ github.event.inputs.version }}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      - name: create pull request
-        run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
-        env:
-          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-          TITLE: Bump Version ${{ github.event.inputs.version }}
-          BODY: New version bump ${{ github.event.inputs.version }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: create pull request
+      #   run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
+      #   env:
+      #     BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+      #     TITLE: Bump Version ${{ github.event.inputs.version }}
+      #     BODY: New version bump ${{ github.event.inputs.version }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: output of bump job
+        run: |
+          echo "${{needs.bump.outputs.newBranch}}"

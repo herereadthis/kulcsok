@@ -55,6 +55,7 @@ const configure = async () => {
             .push('origin', newBranch);
 
         console.log(`Pushed branch ${newBranch}`);
+        core.setOutput("newBranch", newBranch);
     } catch (err) {
         throw err;
     }
