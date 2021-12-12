@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const shell = require('shelljs');
 const simpleGit = require('simple-git');
-
 const package = require('./package.json');
 
 const git = simpleGit();
@@ -9,17 +8,7 @@ const git = simpleGit();
 shell.config.verbose = true;
 
 const version = core.getInput('version');
-
-const versionNumber = core.getInput('version');
 const baseBranch = core.getInput('base_branch');
-
-if (!semverRegex().test(versionNumber)) {
-    throw new Error('Version number is not semver!');
-}
-
-if (repoToken === undefined || repoToken === null) {
-    core.warning('No github_token has been detected, the action may fail if it needs to use the API');
-}
 
 const getNewVersion = () => {
     if (!['major', 'minor', 'patch'].includes(version)) {

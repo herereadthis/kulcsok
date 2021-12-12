@@ -45,7 +45,6 @@ jobs:
         with:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Get Outputs
         run: |
           echo "The version number is $NEW_VERSION_NUMBER"
