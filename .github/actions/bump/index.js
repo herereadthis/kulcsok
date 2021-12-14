@@ -20,8 +20,11 @@ const getNewVersion = () => {
 
     if (version === 'major') {
         packageValues[0] = parseInt(packageValues[0]) + 1;
+        packageValues[1] = 0;
+        packageValues[2] = 0;
     } else if (version === 'minor') {
         packageValues[1] = parseInt(packageValues[1]) + 1;
+        packageValues[2] = 0;
     } else {
         packageValues[2] = parseInt(packageValues[2]) + 1;
     }
