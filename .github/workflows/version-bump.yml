@@ -85,13 +85,13 @@ jobs:
           NEW_VERSION_NUMBER: ${{needs.bump.outputs.new_version_number}}
           NEW_BRANCH: ${{needs.bump.outputs.new_branch}}
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      # - name: create pull request
-      #   run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
-      #   env:
-      #     BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-      #     TITLE: Bump Version ${{ github.event.inputs.version }}
-      #     BODY: New version bump ${{ github.event.inputs.version }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: output of bump job
-      #   run: |
-      #     echo "${{needs.bump.outputs.new_branch}}"
+      - name: create pull request
+        run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body "$BODY"
+        env:
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          TITLE: Bump Version ${{ github.event.inputs.version }}
+          BODY: New version bump ${{ github.event.inputs.version }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: output of bump job
+        run: |
+          echo "${{needs.bump.outputs.new_branch}}"
