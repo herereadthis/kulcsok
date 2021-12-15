@@ -16,27 +16,7 @@ const getNewVersion = () => {
         throw new Error('invalid version!');
     }
 
-    const packageVersion = package.version;
-    const packageValues = packageVersion.split('.');
-
-    const semverStyle = semver.inc(package.version, version);
-
-    console.log('semver?');
-    console.log(semverStyle);
-    console.log('semver?');
-
-    if (version === 'major') {
-        packageValues[0] = parseInt(packageValues[0]) + 1;
-        packageValues[1] = 0;
-        packageValues[2] = 0;
-    } else if (version === 'minor') {
-        packageValues[1] = parseInt(packageValues[1]) + 1;
-        packageValues[2] = 0;
-    } else {
-        packageValues[2] = parseInt(packageValues[2]) + 1;
-    }
-
-    return packageValues.join('.');
+    return semver.inc(package.version, version);
 };
 
 const updatePackages = async (newBranch) => {
