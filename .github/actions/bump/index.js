@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const shell = require('shelljs');
 const simpleGit = require('simple-git');
 const package = require('./package.json');
+const semver = require('semver');
 
 const git = simpleGit();
 
@@ -17,6 +18,12 @@ const getNewVersion = () => {
 
     const packageVersion = package.version;
     const packageValues = packageVersion.split('.');
+
+    const semverStyle = semver.inc(package.version, version);
+
+    console.log('semver?');
+    console.log(semverStyle);
+    console.log('semver?');
 
     if (version === 'major') {
         packageValues[0] = parseInt(packageValues[0]) + 1;
@@ -50,11 +57,6 @@ const updatePackages = async (newBranch) => {
 
 const newVersionNumber = getNewVersion();
 const newBranch = `bump-version-${newVersionNumber}`;
-
-console.log('***');
-console.log(`New Vervsion is: <${newVersionNumber}>`);
-console.log(`New Branch is: <${newBranch}>`);
-console.log('***');
 
 core.setOutput("new_version_number", newVersionNumber);
 core.setOutput("new_branch", newBranch);
