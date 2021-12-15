@@ -33,15 +33,16 @@ const getNewVersion = () => {
 };
 
 const updatePackages = async (newBranch) => {
+    console.log(`newBranch is: ${newBranch}`);
+    console.log(`baseBranch is: ${baseBranch}`);
     try {
-        await git.checkoutBranch(newBranch, baseBranch);
+        await git.fetch()
+            .checkout(baseBranch)
+            .checkoutLocalBranch(newBranch);
 
         shell.exec(`npm version ${version} --no-git-tag-version`);
 
-        await git
-            .add('package.json')
-            .add('package-lock.json');
-
+        await git.add('.');
     } catch (err) {
         throw err;
     }

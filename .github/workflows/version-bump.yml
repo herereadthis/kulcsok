@@ -89,8 +89,8 @@ jobs:
         run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body-file "$TEMPLATE"
         env:
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-          TITLE: Bump Version ${{ github.event.inputs.version }}
-          BODY: New version bump ${{ github.event.inputs.version }}
+          TITLE: Bump Version ${{needs.bump.outputs.new_version_number}}
+          BODY: New version bump ${{needs.bump.outputs.new_version_number}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TEMPLATE: .github/PULL_REQUEST_TEMPLATE/bump-version.md
       - name: output of bump job
