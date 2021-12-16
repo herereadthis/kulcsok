@@ -45,8 +45,8 @@ jobs:
           base_branch: ${{ github.event.inputs.base_branch }}
       - name: Get Outputs
         run: |
-          echo "The version number is $NEW_VERSION_NUMBER"
-          echo "The bump branch is $NEW_BRANCH"
+          echo "The new version number is $NEW_VERSION_NUMBER"
+          echo "The new bump branch is $NEW_BRANCH"
         env:
           NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
           NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}

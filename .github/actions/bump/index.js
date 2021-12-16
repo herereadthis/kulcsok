@@ -6,7 +6,7 @@ const semver = require('semver');
 
 const git = simpleGit();
 
-shell.config.verbose = true;
+// shell.config.verbose = true;
 
 const version = core.getInput('version');
 const baseBranch = core.getInput('base_branch');
@@ -20,8 +20,6 @@ const getNewVersion = () => {
 };
 
 const updatePackages = async (newBranch) => {
-    console.log(`newBranch is: ${newBranch}`);
-    console.log(`baseBranch is: ${baseBranch}`);
     try {
         await git.fetch()
             .checkout(baseBranch)
