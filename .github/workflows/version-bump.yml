@@ -100,6 +100,7 @@ jobs:
         with:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
+          create_pull_request: ${{ github.event.inputs.create_pull_request }}
       - name: Get Outputs
         run: |
           echo "The new version number is $NEW_VERSION_NUMBER"
