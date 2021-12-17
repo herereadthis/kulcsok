@@ -6,10 +6,9 @@ const semver = require('semver');
 
 const git = simpleGit();
 
-// shell.config.verbose = true;
-
 const version = core.getInput('version');
 const baseBranch = core.getInput('base_branch');
+const createPullRequest = core.getInput('create_pull_request') === 'true';
 
 const getNewVersion = () => {
     if (!['major', 'minor', 'patch'].includes(version)) {
@@ -21,9 +20,11 @@ const getNewVersion = () => {
 
 const updatePackages = async (newBranch) => {
     try {
-        await git.fetch()
-            .checkout(baseBranch)
-            .checkoutLocalBranch(newBranch);
+        await git.fetch().checkout(baseBranch);
+
+        if (createPullRequest) {
+            await git.checkoutLocalBranch(newBranch);
+        }
 
         shell.exec(`npm version ${version} --no-git-tag-version`);
 

@@ -7,6 +7,9 @@ inputs:
   version:
     description: 'Version Number'
     required: true
+  create_pull_request:
+    description: 'Create Pull Request'
+    required: true
 outputs:
   new_branch:
     description: 'Bump Branch'

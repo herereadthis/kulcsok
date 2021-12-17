@@ -16,6 +16,11 @@ on:
           - minor
           - patch
         required: true
+      create_pull_request:
+        type: boolean
+        description: 'Create bump pull request'
+        default: true
+        required: false
 
 jobs:
   # gimme-context:
@@ -25,9 +30,61 @@ jobs:
   #       env:
   #         GITHUB_CONTEXT: ${{ toJSON(github) }}
   #       run: echo "$GITHUB_CONTEXT"
-  bump:
-    name: 'Bump Version'
+  inputs:
     runs-on: ubuntu-latest
+    name: 'Verify inputs'
+    steps:
+      - name: Show inputs
+        run: |
+          echo "version: $VERSION"
+          echo "base branch: $BASE_BRANCH"
+          echo "create pull request: $CREATE_PULL_REQUEST"
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          CREATE_PULL_REQUEST: ${{ github.event.inputs.create_pull_request }}
+  bump-commit:
+    name: 'Bump Version Commit'
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.create_pull_request == 'false' }}
+    outputs:
+      new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: install node on bump action
+        run: |
+          cd ./.github/actions/bump
+          npm ci
+      - name: run bump action
+        uses: ./.github/actions/bump
+        id: bump_action
+        with:
+          version: ${{ github.event.inputs.version }}
+          base_branch: ${{ github.event.inputs.base_branch }}
+          create_pull_request: ${{ github.event.inputs.create_pull_request }}
+      - name: Get Outputs
+        run: |
+          echo "The base branch is $BASE_BRANCH"
+          echo "The new version number is $NEW_VERSION_NUMBER"
+        env:
+          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+      - name: Commit and Push
+        # commit and push: https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+        run: |
+          git branch
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -am "Bump version to $NEW_VERSION_NUMBER"
+          git push origin $BASE_BRANCH
+        env:
+          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  bump-commit-pr:
+    name: 'Bump Version + Pull Request'
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.create_pull_request == 'true' }}
     outputs:
       new_branch: ${{ steps.bump_action.outputs.new_branch }}
       new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
