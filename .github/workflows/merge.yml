@@ -1,0 +1,22 @@
+# Manually triggered Workflow
+name: 'Version Bump'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    name: 'save output'
+      steps:
+        - name: 'echo'
+          id: echo
+          run: | 
+            echo "gh pr list  --json '$ATTRIBUTES'
+          env:
+            ATTRIBUTES: mergeable,state,title,url,number,isDraft,labels,mergeStateStatus,reviewDecision,baseRefName,headRefName,reviewRequests,reviews
+        - name: 'response'
+          run: |
+            echo "$PR_LIST"
+          env:
+            PR_LIST: ${{ toJSON(steps.echo.outputs) }}
