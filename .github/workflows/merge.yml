@@ -1,8 +1,8 @@
 # Manually triggered Workflow
-name: 'Version Bump'
+name: 'Merge Nudger'
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
   tester:

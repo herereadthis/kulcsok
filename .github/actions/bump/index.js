@@ -7,14 +7,11 @@ const package = require('./package.json');
 
 const git = simpleGit();
 
+// Action inputs
 const VERSION = core.getInput('version');
 const BASE_BRANCH = core.getInput('base_branch');
 const CREATE_PULL_REQUEST = core.getInput('create_pull_request') === 'true';
-
-/**
- * Directory list of packages that will need updates. Modify as needed.
- */
-const PACKAGE_DIRECTORIES = ['./'];
+const PACKAGE_DIRECTORIES = JSON.parse(core.getInput('package_directories'));
 
 /**
  * Default commit message. Be careful when modifying as this commit may be
@@ -39,21 +36,6 @@ const getNewVersion = () => {
 };
 
 /**
- * Set up configuration and local branch
- * User is github actions-bot
- * https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
- * 
- * @returns {function} git
- */
-const initializeGit = () => {
-    return git
-        .addConfig('user.email', 'github-actions')
-        .addConfig('user.name', 'github-actions@github.com')
-        .fetch()
-        .checkout(BASE_BRANCH);
-}
-
-/**
  * Update all package files based on package directory list
  */
 const updatePackages = () => {
@@ -63,18 +45,35 @@ const updatePackages = () => {
 };
 
 /**
+ * Set up configuration and local branch
+ * User is github actions-bot
+ * https://github.com/actions/checkout#push-a-commit-using-the-built-in-token
+ * 
+ * @param {string} baseBranch - where to start
+ * @returns {function}
+ */
+const initializeGit = (baseBranch) => {
+    return git
+        .addConfig('user.email', 'github-actions')
+        .addConfig('user.name', 'github-actions@github.com')
+        .fetch()
+        .checkout(baseBranch);
+}
+
+/**
  * Bump package versions and push the commit.
  * 
- * @param {string} newVersionNumber 
+ * @param {string} baseBranch - the starting branch at which to make the commit
+ * @param {string} commitMessage - text for commit
  */
-const pushVersionBump = async (newVersionNumber) => {
+const pushVersionBump = async (baseBranch, commitMessage) => {
     try {
-        await initializeGit();
+        await initializeGit(baseBranch);
         updatePackages();
         await git
             .add('.')
-            .commit(getCommitMessage(newVersionNumber))
-            .push('origin', BASE_BRANCH);
+            .commit(commitMessage)
+            .push('origin', baseBranch);
     } catch (err) {
         core.setFailed(err.message);
         throw err;
@@ -84,17 +83,18 @@ const pushVersionBump = async (newVersionNumber) => {
 /**
  * Bump package versions in a new branch and create a pull request.
  * 
- * @param {string} newVersionNumber 
- * @param {string} newBranch 
+ * @param {string} baseBranch - the starting branch at which to create a new branch
+ * @param {string} newBranch - the name of the new branch
+ * @param {string} commitMessage - text for commit
  */
-const createVersionBumpPullRequest = async (newVersionNumber, newBranch) => {
+const createVersionBumpPullRequest = async (baseBranch, newBranch, commitMessage) => {
     try {
-        await initializeGit();
+        await initializeGit(baseBranch);
         await git.checkoutLocalBranch(newBranch);
         updatePackages();
         await git
             .add('.')
-            .commit(getCommitMessage(newVersionNumber))
+            .commit(commitMessage)
             .push('origin', newBranch);
     } catch (err) {
         core.setFailed(err.message);
@@ -104,12 +104,13 @@ const createVersionBumpPullRequest = async (newVersionNumber, newBranch) => {
 
 const newVersionNumber = getNewVersion();
 const newBranch = `bump-version-${newVersionNumber}`;
+const commitMessage = getCommitMessage(newVersionNumber);
 
 core.setOutput("new_version_number", newVersionNumber);
 core.setOutput("new_branch", newBranch);
 
 if (CREATE_PULL_REQUEST) {
-    createVersionBumpPullRequest(newVersionNumber, newBranch);
+    createVersionBumpPullRequest(BASE_BRANCH, newBranch, commitMessage);
 } else {
-    pushVersionBump(newVersionNumber);
+    pushVersionBump(BASE_BRANCH, commitMessage);
 }

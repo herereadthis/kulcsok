@@ -1,6 +1,10 @@
 # Manually triggered Workflow
 name: 'Version Bump'
 
+env:
+  # Modify the following as defined by the repository.
+  PACKAGE_DIRECTORIES: '["./"]'
+
 on:
   workflow_dispatch:
     inputs:
@@ -31,6 +35,15 @@ jobs:
   #       env:
   #         GITHUB_CONTEXT: ${{ toJSON(github) }}
   #       run: echo "$GITHUB_CONTEXT"
+  env_var:
+    runs-on: ubuntu-latest
+    name: 'List global env variables'
+    steps:
+      - name: show env
+        run: |
+          echo "package directories: $PACKAGE_DIRECTORIES"
+        env:
+          PACKAGE_DIRECTORIES: ${{ env.PACKAGE_DIRECTORIES }}
   inputs:
     runs-on: ubuntu-latest
     name: 'Verify inputs'
@@ -63,6 +76,7 @@ jobs:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
           create_pull_request: ${{ github.event.inputs.create_pull_request }}
+          package_directories: ${{ env.PACKAGE_DIRECTORIES }}
       - name: Verify Outputs
         run: |
           echo "The base branch is $BASE_BRANCH"
@@ -90,6 +104,7 @@ jobs:
           version: ${{ github.event.inputs.version }}
           base_branch: ${{ github.event.inputs.base_branch }}
           create_pull_request: ${{ github.event.inputs.create_pull_request }}
+          package_directories: ${{ env.PACKAGE_DIRECTORIES }}
       - name: Verify Outputs
         run: |
           echo "The base branch is $BASE_BRANCH"
