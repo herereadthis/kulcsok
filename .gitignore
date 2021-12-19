@@ -9,3 +9,4 @@ secret.json
 secret.aes
 seed.txt
 .eslintcache-tests
+.github/actions/bump

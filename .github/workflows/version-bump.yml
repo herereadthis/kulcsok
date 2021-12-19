@@ -65,6 +65,12 @@ jobs:
       new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
     steps:
       - uses: actions/checkout@v2
+      - name: Get bump action repo
+        uses: actions/checkout@v2
+        with:
+          repository: herereadthis/guosim
+          ref: master
+          path: ./.github/actions/bump
       - name: install node on bump action
         run: |
           cd ./.github/actions/bump
@@ -93,6 +99,12 @@ jobs:
       new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
     steps:
       - uses: actions/checkout@v2
+      - name: Get bump action repo
+        uses: actions/checkout@v2
+        with:
+          repository: herereadthis/guosim
+          ref: master
+          path: ./.github/actions/bump
       - name: install node on bump action
         run: |
           cd ./.github/actions/bump
@@ -121,37 +133,3 @@ jobs:
           TITLE: Bump Version ${{ steps.bump_action.outputs.new_version_number }}
           TEMPLATE: .github/PULL_REQUEST_TEMPLATE/bump-version.md
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # push:
-  #   needs: [bump]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: checkout branch
-  #       run: |
-  #         git fetch origin
-  #         git branch
-  #         git checkout $NEW_BRANCH
-  #         git branch
-  #       env:
-  #         NEW_BRANCH: ${{needs.bump.outputs.new_branch}}
-  #         BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-  #     - name: Get Outputs
-  #       run: |
-  #         echo "The version number is $NEW_VERSION_NUMBER"
-  #         echo "The new branch is $NEW_BRANCH"
-  #         echo "The base branch is $BASE_BRANCH"
-  #       env:
-  #         NEW_VERSION_NUMBER: ${{needs.bump.outputs.new_version_number}}
-  #         NEW_BRANCH: ${{needs.bump.outputs.new_branch}}
-  #         BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-  #     - name: create pull request
-  #       run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body-file "$TEMPLATE"
-  #       env:
-  #         BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-  #         TITLE: Bump Version ${{needs.bump.outputs.new_version_number}}
-  #         BODY: New version bump ${{needs.bump.outputs.new_version_number}}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         TEMPLATE: .github/PULL_REQUEST_TEMPLATE/bump-version.md
-  #     - name: output of bump job
-  #       run: |
-  #         echo "${{needs.bump.outputs.new_branch}}"
