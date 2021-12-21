@@ -28,72 +28,9 @@ on:
         required: false
 
 jobs:
-  # gimme-context:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Dump GitHub context
-  #       env:
-  #         GITHUB_CONTEXT: ${{ toJSON(github) }}
-  #       run: echo "$GITHUB_CONTEXT"
-  env_var:
-    runs-on: ubuntu-latest
-    name: 'List global env variables'
-    steps:
-      - name: show env
-        run: |
-          echo "package directories: $PACKAGE_DIRECTORIES"
-        env:
-          PACKAGE_DIRECTORIES: ${{ env.PACKAGE_DIRECTORIES }}
-  inputs:
-    runs-on: ubuntu-latest
-    name: 'Verify inputs'
-    steps:
-      - name: Show inputs
-        run: |
-          echo "version: $VERSION"
-          echo "base branch: $BASE_BRANCH"
-          echo "create pull request: $CREATE_PULL_REQUEST"
-        env:
-          VERSION: ${{ github.event.inputs.version }}
-          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
-          CREATE_PULL_REQUEST: ${{ github.event.inputs.create_pull_request }}
-  bump-commit:
-    name: 'Bump Version Commit'
-    runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.create_pull_request == 'false' }}
-    outputs:
-      new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Get bump action repo
-        uses: actions/checkout@v2
-        with:
-          repository: herereadthis/guosim
-          ref: main
-          path: ./.github/actions/bump
-      - name: install node on bump action
-        run: |
-          cd ./.github/actions/bump
-          npm ci
-      - name: run bump action
-        uses: ./.github/actions/bump
-        id: bump_action
-        with:
-          version: ${{ github.event.inputs.version }}
-          base_branch: ${{ github.event.inputs.base_branch }}
-          create_pull_request: ${{ github.event.inputs.create_pull_request }}
-          package_directories: ${{ env.PACKAGE_DIRECTORIES }}
-      - name: Verify Outputs
-        run: |
-          echo "The base branch is $BASE_BRANCH"
-          echo "The new version number is $NEW_VERSION_NUMBER"
-        env:
-          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
-          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
   bump-commit-pr:
-    name: 'Bump Version + Pull Request'
+    name: 'Bump Package Versions'
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.create_pull_request == 'true' }}
     outputs:
       new_branch: ${{ steps.bump_action.outputs.new_branch }}
       new_version_number: ${{ steps.bump_action.outputs.new_version_number }}
@@ -117,19 +54,53 @@ jobs:
           base_branch: ${{ github.event.inputs.base_branch }}
           create_pull_request: ${{ github.event.inputs.create_pull_request }}
           package_directories: ${{ env.PACKAGE_DIRECTORIES }}
-      - name: Verify Outputs
-        run: |
-          echo "The base branch is $BASE_BRANCH"
-          echo "The new version number is $NEW_VERSION_NUMBER"
-          echo "The new bump branch is $NEW_BRANCH"
-        env:
-          NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
-          NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}
-          BASE_BRANCH: ${{ github.event.inputs.base_branch }}
       - name: Create pull request
+        if: ${{ github.event.inputs.create_pull_request == 'true' }}
         run: gh pr create --base $BASE_BRANCH --title "$TITLE" --body-file "$TEMPLATE"
         env:
           BASE_BRANCH: ${{ github.event.inputs.base_branch }}
           TITLE: Bump Version ${{ steps.bump_action.outputs.new_version_number }}
           TEMPLATE: .github/PULL_REQUEST_TEMPLATE/bump-version.md
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+      # - name: Verify Outputs
+      #   run: |
+      #     echo "The base branch is $BASE_BRANCH"
+      #     echo "The new version number is $NEW_VERSION_NUMBER"
+      #     echo "The new bump branch is $NEW_BRANCH"
+      #   env:
+      #     NEW_VERSION_NUMBER: ${{ steps.bump_action.outputs.new_version_number }}
+      #     NEW_BRANCH: ${{ steps.bump_action.outputs.new_branch }}
+      #     BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+
+  # gimme-context:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Dump GitHub context
+  #       env:
+  #         GITHUB_CONTEXT: ${{ toJSON(github) }}
+  #       run: echo "$GITHUB_CONTEXT"
+  # env_var:
+  #   runs-on: ubuntu-latest
+  #   name: 'List global env variables'
+  #   steps:
+  #     - name: show env
+  #       run: |
+  #         echo "package directories: $PACKAGE_DIRECTORIES"
+  #       env:
+  #         PACKAGE_DIRECTORIES: ${{ env.PACKAGE_DIRECTORIES }}
+  # inputs:
+  #   runs-on: ubuntu-latest
+  #   name: 'Verify inputs'
+  #   steps:
+  #     - name: Show inputs
+  #       run: |
+  #         echo "version: $VERSION"
+  #         echo "base branch: $BASE_BRANCH"
+  #         echo "create pull request: $CREATE_PULL_REQUEST"
+  #       env:
+  #         VERSION: ${{ github.event.inputs.version }}
+  #         BASE_BRANCH: ${{ github.event.inputs.base_branch }}
+  #         CREATE_PULL_REQUEST: ${{ github.event.inputs.create_pull_request }}
