@@ -1,0 +1,23 @@
+name: 'Merge Action'
+description: 'Merge or update branches'
+inputs:
+  pull_requests:
+    description: 'Pull Requests'
+    required: true
+#   version:
+#     description: 'Version Number'
+#     required: true
+#   create_pull_request:
+#     description: 'Create Pull Request'
+#     required: true
+#   package_directories:
+#     description: 'Package Directories'
+#     required: true
+# outputs:
+#   new_branch:
+#     description: 'Bump Branch'
+#   new_version_number:
+#     description: 'New Version Number'
+runs:
+  using: 'node16'
+  main: 'index.js'

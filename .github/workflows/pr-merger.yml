@@ -1,0 +1,33 @@
+# Manually triggered Workflow
+name: 'Merge Nudger'
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_branch:
+        description: 'Repository'
+        default: 'simcapture-cloud'
+        required: false
+
+jobs:
+  bump-commit-pr:
+    name: 'Bump Package Versions'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: 'get pr list'
+        id: get_pr_list
+        run: | 
+          echo "::set-output name=json::$(gh pr list  --json $ATTRIBUTES)"
+        env:
+          ATTRIBUTES: mergeable,state,title,url,number,isDraft,labels,mergeStateStatus,reviewDecision,baseRefName,headRefName,reviewRequests,reviews
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: install node on merge action
+        run: |
+          cd ./.github/actions/merge
+          npm ci
+      - name: run merge action
+        uses: ./.github/actions/merge
+        id: merge_action
+        with:
+          pull_requests: ${{ steps.get_pr_list.outputs.json }}
