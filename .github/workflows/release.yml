@@ -1,0 +1,37 @@
+# Manually triggered Workflow
+name: 'Releaser'
+
+env:
+  # Modify the following as defined by the repository.
+  PACKAGE_DIRECTORIES: '["./"]'
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+      release_branch:
+        description: 'Release Branch'
+        required: true
+      create_prod_build:
+        type: boolean
+        description: 'Create Production Release'
+        default: false
+        required: true
+
+jobs:
+  inputs:
+    runs-on: ubuntu-latest
+    name: 'Verify inputs'
+    steps:
+      - name: Show inputs
+        run: |
+          echo "version: $VERSION"
+          echo "release branch: $RELEASE_BRANCH"
+          echo "create production build: $CREATE_PROD_BUILD"
+        env:
+          VERSION: ${{ github.event.inputs.version }}
+          RELEASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          CREATE_PROD_BUILD: ${{ github.event.inputs.create_prod_build }}
+
