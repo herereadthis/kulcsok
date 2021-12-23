@@ -8,9 +8,6 @@ env:
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version'
-        required: true
       release_branch:
         description: 'Release Branch'
         required: true
@@ -27,11 +24,9 @@ jobs:
     steps:
       - name: Show inputs
         run: |
-          echo "version: $VERSION"
           echo "release branch: $RELEASE_BRANCH"
           echo "create production build: $CREATE_PROD_BUILD"
         env:
-          VERSION: ${{ github.event.inputs.version }}
           RELEASE_BRANCH: ${{ github.event.inputs.base_branch }}
           CREATE_PROD_BUILD: ${{ github.event.inputs.create_prod_build }}
 
