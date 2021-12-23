@@ -18,11 +18,10 @@ on:
         required: true
 
 jobs:
-  inputs:
+  verify_inputs:
     runs-on: ubuntu-latest
     name: 'Verify inputs'
     steps:
-      - uses: actions/checkout@v2
       - name: Show inputs
         run: |
           echo "release branch: $RELEASE_BRANCH"
@@ -30,9 +29,11 @@ jobs:
         env:
           RELEASE_BRANCH: ${{ github.event.inputs.release_branch }}
           CREATE_PROD_BUILD: ${{ github.event.inputs.create_prod_build }}
-  release:
+  release_job:
     runs-on: ubuntu-latest
     name: 'release job'
+    steps:
+      - uses: actions/checkout@v2
       - name: install node on release action
         run: |
           cd ./.github/actions/release
