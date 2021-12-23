@@ -1,0 +1,15 @@
+name: 'Bump Action'
+description: 'Bump the version number of the repo'
+inputs:
+  release_branch:
+    description: 'Release Branch'
+    required: true
+  create_prod_build:
+    description: 'Create Production Release'
+    required: true
+outputs:
+  version:
+    description: 'version'
+runs:
+  using: 'node16'
+  main: 'index.js'

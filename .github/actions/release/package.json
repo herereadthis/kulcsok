@@ -1,0 +1,21 @@
+{
+    "name": "release",
+    "version": "1.0.0",
+    "description": "Version bumps package files for node.js applications",
+    "main": "index.js",
+    "engines": {
+        "node": "^16.13.1"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "license": "MIT",
+    "keywords": [],
+    "author": "",
+    "dependencies": {
+        "@actions/core": "^1.6.0",
+        "semver": "^7.3.5",
+        "shelljs": "^0.8.4",
+        "simple-git": "^2.47.0"
+    }
+}

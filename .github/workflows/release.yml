@@ -22,11 +22,32 @@ jobs:
     runs-on: ubuntu-latest
     name: 'Verify inputs'
     steps:
+      - uses: actions/checkout@v2
       - name: Show inputs
         run: |
           echo "release branch: $RELEASE_BRANCH"
           echo "create production build: $CREATE_PROD_BUILD"
         env:
-          RELEASE_BRANCH: ${{ github.event.inputs.base_branch }}
+          RELEASE_BRANCH: ${{ github.event.inputs.release_branch }}
           CREATE_PROD_BUILD: ${{ github.event.inputs.create_prod_build }}
+  release:
+    runs-on: ubuntu-latest
+    name: 'release job'
+      - name: install node on release action
+        run: |
+          cd ./.github/actions/release
+          npm ci
+      - name: run release action
+        uses: ./.github/actions/release
+        id: release_action
+        with:
+          release_branch: ${{ github.event.inputs.base_branch }}
+          create_prod_build: ${{ github.event.inputs.create_pull_request }}
+      - name: Verify Outputs
+        run: |
+          echo "The version is $VERSION"
+          echo "The new version number is $NEW_VERSION_NUMBER"
+          echo "The new bump branch is $NEW_BRANCH"
+        env:
+          VERSION: ${{ steps.release_action.outputs.version }}
 
