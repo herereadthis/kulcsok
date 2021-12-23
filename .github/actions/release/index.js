@@ -13,4 +13,4 @@ const {version: VERSION} = package;
 const RELEASE_BRANCH = core.getInput('release_branch');
 const CREATE_PROD_BUILD = core.getInput('create_prod_build') === 'true';
 
-core.setOutput("version", version);
+core.setOutput("version", VERSION);
