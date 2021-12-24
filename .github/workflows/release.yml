@@ -1,10 +1,6 @@
 # Manually triggered Workflow
 name: 'Releaser'
 
-env:
-  # Modify the following as defined by the repository.
-  PACKAGE_DIRECTORIES: '["./"]'
-
 on:
   workflow_dispatch:
     inputs:
@@ -43,9 +39,12 @@ jobs:
       - name: run release action
         uses: ./.github/actions/release
         id: release_action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           release_branch: ${{ github.event.inputs.base_branch }}
           create_prod_build: ${{ github.event.inputs.create_pull_request }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify Outputs
         run: |
           echo "The version is $VERSION"
