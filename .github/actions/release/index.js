@@ -34,17 +34,17 @@ const run = async () => {
         const {
             owner: currentOwner,
             repo: currentRepo
-        } = context.repo;
+        } = context;
 
         const version = getCurrentVersion();
         const tag = `v${version}`;
         const prerelease = CREATE_PROD_BUILD === false;
 
+        core.warning(version);
+        core.warning(prerelease);
+        core.warning(tag);
         core.warning(currentOwner);
         core.warning(currentRepo);
-        core.warning(tag);
-        core.warning(prerelease);
-        core.warning(version);
 
 
         core.setOutput("version", version);
