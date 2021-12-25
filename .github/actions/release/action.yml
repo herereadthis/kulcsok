@@ -10,6 +10,12 @@ inputs:
 outputs:
   version:
     description: 'version'
+  tag:
+    description: 'tag'
+  owner:
+    description: 'owner'
+  repo:
+    description: 'repo'
 runs:
   using: 'node16'
   main: 'index.js'

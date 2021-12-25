@@ -5,7 +5,6 @@ const {
 } = require('@actions/github');
 const shell = require('shelljs');
 const simpleGit = require('simple-git');
-const semver = require('semver');
 
 const git = simpleGit();
 
@@ -45,9 +44,13 @@ const run = async () => {
         core.warning(currentRepo);
         core.warning(tag);
         core.warning(prerelease);
+        core.warning(version);
 
 
         core.setOutput("version", version);
+        core.setOutput("tag", tag);
+        core.setOutput("owner", currentOwner);
+        core.setOutput("repo", currentRepo);
     } catch (err) {
         core.setFailed(err.message);
     }

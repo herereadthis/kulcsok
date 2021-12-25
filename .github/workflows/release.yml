@@ -28,6 +28,11 @@ jobs:
   release_job:
     runs-on: ubuntu-latest
     name: 'release job'
+    outputs:
+      version: ${{ steps.release_action.outputs.version }}
+      tag: ${{ steps.release_action.outputs.tag }}
+      owner: ${{ steps.release_action.outputs.owner }}
+      repo: ${{ steps.release_action.outputs.repo }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -47,8 +52,12 @@ jobs:
       - name: Verify Outputs
         run: |
           echo "The version is $VERSION"
-          echo "The new version number is $NEW_VERSION_NUMBER"
-          echo "The new bump branch is $NEW_BRANCH"
+          echo "The tag is $TAG"
+          echo "The owner is $OWNER"
+          echo "The version is $REPO"
         env:
           VERSION: ${{ steps.release_action.outputs.version }}
+          TAG: ${{ steps.release_action.outputs.tag }}
+          OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
+          REPO: ${{ steps.release_action.outputs.repo }}
 
