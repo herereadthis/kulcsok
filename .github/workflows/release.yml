@@ -60,4 +60,10 @@ jobs:
           TAG: ${{ steps.release_action.outputs.tag }}
           OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
           REPO: ${{ steps.release_action.outputs.repo }}
+      - name: Github Script
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const script = require('./.github/actions/release/script.js')
+            await script({github, context, core})
 

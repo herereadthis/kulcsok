@@ -1,8 +1,5 @@
 const core = require('@actions/core');
-const {
-    GitHub,
-    context
-} = require('@actions/github');
+const { GitHub, context } = require('@actions/github');
 const shell = require('shelljs');
 const simpleGit = require('simple-git');
 
@@ -22,10 +19,11 @@ const getCurrentVersion = () => {
 
 
 const run = async () => {
-    core.warning(1);
+    core.info(1);
     try {
         // Get authenticated GitHub client (Ocktokit): 
         // https://github.com/actions/toolkit/tree/master/packages/github#usage
+    // Get authenticated GitHub client (Ocktokit): https://github.com/actions/toolkit/tree/master/packages/github#usage
         const github = new GitHub(process.env.GITHUB_TOKEN);
 
         core.warning(2);
