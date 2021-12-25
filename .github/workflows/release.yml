@@ -44,7 +44,6 @@ jobs:
         with:
           release_branch: ${{ github.event.inputs.base_branch }}
           create_prod_build: ${{ github.event.inputs.create_pull_request }}
-          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Verify Outputs
         run: |
           echo "The version is $VERSION"
