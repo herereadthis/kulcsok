@@ -10,7 +10,7 @@ const run = async ({github, context, core}) => {
   // })
 
   core.info('github')
-  core.info(JSON.stringify(github.event))
+  core.info(JSON.stringify(github))
   core.info('context');
   core.info(JSON.stringify(context));
   core.info('repo');
