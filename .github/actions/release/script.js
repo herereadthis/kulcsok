@@ -9,7 +9,7 @@ const run = async ({github, context, core}) => {
   //   ref: `${SHA}`
   // })
 
-  core.info(context);
+  core.info(JSON.stringify(context));
 
   // core.exportVariable('author', commit.data.commit.author.email)
 };
