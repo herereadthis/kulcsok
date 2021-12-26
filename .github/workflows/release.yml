@@ -41,25 +41,25 @@ jobs:
         run: |
           cd ./.github/actions/release
           npm ci
-      - name: run release action
-        uses: ./.github/actions/release
-        id: release_action
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release_branch: ${{ github.event.inputs.base_branch }}
-          create_prod_build: ${{ github.event.inputs.create_pull_request }}
-      - name: Verify Outputs
-        run: |
-          echo "The version is $VERSION"
-          echo "The tag is $TAG"
-          echo "The owner is $OWNER"
-          echo "The version is $REPO"
-        env:
-          VERSION: ${{ steps.release_action.outputs.version }}
-          TAG: ${{ steps.release_action.outputs.tag }}
-          OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
-          REPO: ${{ steps.release_action.outputs.repo }}
+      # - name: run release action
+      #   uses: ./.github/actions/release
+      #   id: release_action
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     release_branch: ${{ github.event.inputs.base_branch }}
+      #     create_prod_build: ${{ github.event.inputs.create_pull_request }}
+      # - name: Verify Outputs
+      #   run: |
+      #     echo "The version is $VERSION"
+      #     echo "The tag is $TAG"
+      #     echo "The owner is $OWNER"
+      #     echo "The version is $REPO"
+      #   env:
+      #     VERSION: ${{ steps.release_action.outputs.version }}
+      #     TAG: ${{ steps.release_action.outputs.tag }}
+      #     OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
+      #     REPO: ${{ steps.release_action.outputs.repo }}
       - name: Github Script
         uses: actions/github-script@v5
         with:
