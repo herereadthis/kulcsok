@@ -61,10 +61,12 @@ jobs:
       #     TAG: ${{ steps.release_action.outputs.tag }}
       #     OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
       #     REPO: ${{ steps.release_action.outputs.repo }}
+      - name: View context attributes
+        uses: actions/github-script@v5
+        with:
+          script: console.log(context)
       - name: Github Script
         uses: actions/github-script@v5
-        env:
-          SHA: '${{env.parentSHA}}'
         with:
           script: |
             const script = require('./.github/actions/release/script.js')
