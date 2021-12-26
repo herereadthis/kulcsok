@@ -9,6 +9,8 @@ const run = async ({github, context, core}) => {
   //   ref: `${SHA}`
   // })
 
+  core.info('github')
+  core.info(JSON.stringify(github.event))
   core.info('context');
   core.info(JSON.stringify(context));
   core.info('repo');
