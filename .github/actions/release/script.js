@@ -25,10 +25,14 @@ const run = async ({github, context, core}) => {
     core.info('repos');
     core.info(JSON.stringify(context.repos));
 
-    const commits = await github.rest.repos.listCommits({owner, repo});
+    const commits = await github.rest.repos.listCommits({
+        owner,
+        repo,
+        per_page: 3
+    });
 
     core.info('commits');
-    core.info(JSON.stringify(commits));
+    core.info(JSON.stringify(commits.data));
 
     // core.exportVariable('author', commit.data.commit.author.email)
 };
