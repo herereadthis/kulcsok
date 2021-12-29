@@ -64,9 +64,7 @@ jobs:
       - name: Get package version
         id: package_version
         run: |
-          echo "::set-output name=version::$VERSION_COMMAND"
-        env:
-          VERSION_COMMAND: $(node -p -e "require('./package.json').version")
+          echo '::set-output name=version::$(node -p -e "require(\'./package.json\').version")''
       - name: View context attributes
         uses: actions/github-script@v5
         with:
