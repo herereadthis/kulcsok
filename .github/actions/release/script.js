@@ -33,13 +33,22 @@ const run = async ({github, context, core}) => {
 
     const {
         html_url,
-        sha
+        sha,
+        commit
     } = commits.data[0];
 
     core.info('sha');
     core.info(sha);
     core.info('html_url');
     core.info(html_url);
+    core.info('commit.message');
+    core.info(commit.message);
+
+    // octokit.rest.repos.createRelease({
+    //     owner,
+    //     repo,
+    //     tag_name,
+    //   });
 
     // core.exportVariable('author', commit.data.commit.author.email)
 };
