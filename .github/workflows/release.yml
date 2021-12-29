@@ -61,18 +61,20 @@ jobs:
       #     TAG: ${{ steps.release_action.outputs.tag }}
       #     OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
       #     REPO: ${{ steps.release_action.outputs.repo }}
-      - name: Get package version
-        uses: actions/github-script@v5
-        id: package_version
-        with:
-          script: |
-            const package = require('package.json')
-            return package.version
-      - name: outputs
-        run: |
-          echo "$FOO"
-        env:
-          FOO: ${{ toJSON(steps.package_version.outputs) }}
+      # - name: Get package version
+      #   uses: actions/github-script@v5
+      #   id: package_version
+      #   with:
+      #     script: |
+      #       const package = require('package.json')
+      #       return package.version
+      #   run: |
+      #     ls
+      # - name: outputs
+      #   run: |
+      #     echo "$FOO"
+      #   env:
+      #     FOO: ${{ toJSON(steps.package_version.outputs) }}
       - name: View context attributes
         uses: actions/github-script@v5
         with:

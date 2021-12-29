@@ -1,6 +1,14 @@
+const exec = require('@actions/exec');
+const shell = require('shelljs');
+
 const run = async ({github, context, core}) => {
 
     core.info('hello world');
+
+    await exec.exec('ls');
+
+
+    const currentVersion = shell.exec(`echo $(node -p -e "require('./package.json').version")`);
 
     // const {SHA} = process.env
     // const commit = await github.rest.repos.getCommit({
@@ -14,6 +22,10 @@ const run = async ({github, context, core}) => {
         repo
     } = context.repo;
 
+
+
+    core.info('currentVersion')
+    core.info(currentVersion)
     core.info('process.env')
     core.info(JSON.stringify(process.env))
     core.info('github')
