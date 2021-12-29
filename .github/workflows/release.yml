@@ -64,9 +64,10 @@ jobs:
       - name: Get package version
         uses: actions/github-script@v5
         id: package_version
-        script: |
-          const package = require('package.json')
-          return package.version
+        with:
+          script: |
+            const package = require('package.json')
+            return package.version
       - name: outputs
         run: |
           echo "$FOO"
