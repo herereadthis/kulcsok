@@ -62,9 +62,16 @@ jobs:
       #     OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
       #     REPO: ${{ steps.release_action.outputs.repo }}
       - name: Get package version
+        uses: actions/github-script@v5
         id: package_version
+        script: |
+          const package = require('package.json')
+          return package.version
+      - name: outputs
         run: |
-          echo '::set-output name=version::$(node -p -e "require(\'./package.json\').version")'
+          echo "$FOO"
+        env:
+          FOO: ${{ toJSON(steps.package_version.outputs) }}
       - name: View context attributes
         uses: actions/github-script@v5
         with:
@@ -74,7 +81,6 @@ jobs:
         env:
           branch: ${{ github.event.inputs.release_branch }}
           create_prod_build: ${{ github.event.inputs.create_prod_build }}
-          package_version: ${{ steps.package_version.outputs.version}}
         with:
           script: |
             const script = require('./.github/actions/release/script.js')
