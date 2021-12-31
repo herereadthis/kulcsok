@@ -8,32 +8,16 @@ on:
         description: 'Release Branch'
         default: master
         required: true
-      create_prod_build:
+      create_prod_release:
         type: boolean
         description: 'Create Production Release'
         default: false
         required: true
 
 jobs:
-  verify_inputs:
-    runs-on: ubuntu-latest
-    name: 'Verify inputs'
-    steps:
-      - name: Show inputs
-        run: |
-          echo "release branch: $RELEASE_BRANCH"
-          echo "create production build: $CREATE_PROD_BUILD"
-        env:
-          RELEASE_BRANCH: ${{ github.event.inputs.release_branch }}
-          CREATE_PROD_BUILD: ${{ github.event.inputs.create_prod_build }}
   release_job:
     runs-on: ubuntu-latest
     name: 'release job'
-    outputs:
-      version: ${{ steps.release_action.outputs.version }}
-      tag: ${{ steps.release_action.outputs.tag }}
-      owner: ${{ steps.release_action.outputs.owner }}
-      repo: ${{ steps.release_action.outputs.repo }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -42,48 +26,11 @@ jobs:
         run: |
           cd ./.github/actions/release
           npm ci
-      # - name: run release action
-      #   uses: ./.github/actions/release
-      #   id: release_action
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     release_branch: ${{ github.event.inputs.release_branch }}
-      #     create_prod_build: ${{ github.event.inputs.create_prod_build }}
-      # - name: Verify Outputs
-      #   run: |
-      #     echo "The version is $VERSION"
-      #     echo "The tag is $TAG"
-      #     echo "The owner is $OWNER"
-      #     echo "The version is $REPO"
-      #   env:
-      #     VERSION: ${{ steps.release_action.outputs.version }}
-      #     TAG: ${{ steps.release_action.outputs.tag }}
-      #     OWNER: ${{ toJSON(steps.release_action.outputs.owner) }}
-      #     REPO: ${{ steps.release_action.outputs.repo }}
-      # - name: Get package version
-      #   uses: actions/github-script@v5
-      #   id: package_version
-      #   with:
-      #     script: |
-      #       const package = require('package.json')
-      #       return package.version
-      #   run: |
-      #     ls
-      # - name: outputs
-      #   run: |
-      #     echo "$FOO"
-      #   env:
-      #     FOO: ${{ toJSON(steps.package_version.outputs) }}
-      - name: View context attributes
-        uses: actions/github-script@v5
-        with:
-          script: console.log(context)
       - name: Github Script
         uses: actions/github-script@v5
         env:
           branch: ${{ github.event.inputs.release_branch }}
-          create_prod_build: ${{ github.event.inputs.create_prod_build }}
+          create_prod_release: ${{ github.event.inputs.create_prod_release }}
         with:
           script: |
             const script = require('./.github/actions/release/script.js')
