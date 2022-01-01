@@ -27,16 +27,11 @@ jobs:
         with:
           repository: herereadthis/guosim
           ref: main
-          path: ./temp/guosim
+          path: ./.github/temp/guosim
       - name: install node on release action
         run: |
-          cd ./temp/guosim/release
+          cd ./.github/temp/guosim/release
           npm ci
-      - name: wher am i
-        run: |
-          ls
-          cd temp
-          ls
       - name: Github Script
         uses: actions/github-script@v5
         env:
@@ -44,6 +39,6 @@ jobs:
           create_prod_release: ${{ github.event.inputs.create_prod_release }}
         with:
           script: |
-            const script = require('./temp/guosim/release/script.js')
+            const script = require('./.github/temp/guosim/release/index.js')
             await script({github, context, core})
 

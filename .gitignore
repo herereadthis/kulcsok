@@ -10,4 +10,4 @@ secret.aes
 seed.txt
 .eslintcache-tests
 .github/actions/bump
-temp/
+.github/temp
