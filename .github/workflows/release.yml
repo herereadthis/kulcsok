@@ -32,6 +32,11 @@ jobs:
         run: |
           cd ./temp/guosim/release
           npm ci
+      - name: wher am i
+        run: |
+          ls
+          cd temp
+          ls
       - name: Github Script
         uses: actions/github-script@v5
         env:
