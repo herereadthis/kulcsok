@@ -41,13 +41,13 @@ jobs:
         with:
           repository: herereadthis/guosim
           ref: main
-          path: ./.github/actions/bump
+          path: ./.github/temp/bump
       - name: install node on bump action
         run: |
-          cd ./.github/actions/bump
+          cd ./.github/temp/bump
           npm ci
       - name: run bump action
-        uses: ./.github/actions/bump
+        uses: ./.github/temp/bump
         id: bump_action
         with:
           version: ${{ github.event.inputs.version }}
