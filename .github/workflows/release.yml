@@ -28,10 +28,10 @@ jobs:
           repository: herereadthis/loamscript
           ref: main
           path: ./.github/temp/loamscript
-      - name: install node on release action
-        run: |
-          cd ./.github/temp/loamscript/release
-          npm ci
+      # - name: install node on release action
+      #   run: |
+      #     cd ./.github/temp/loamscript/release
+      #     npm ci
       - name: Github Script
         uses: actions/github-script@v5
         env:
@@ -39,6 +39,6 @@ jobs:
           create_prod_release: ${{ github.event.inputs.create_prod_release }}
         with:
           script: |
-            const script = require('./.github/temp/loamscript/release/index.js')
+            const script = require('./.github/temp/loamscript/release/dist/index.js')
             await script({github, context, core})
 
