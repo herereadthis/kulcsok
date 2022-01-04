@@ -25,13 +25,13 @@ jobs:
       - name: Get automation repo
         uses: actions/checkout@v2
         with:
-          repository: herereadthis/guosim
+          repository: herereadthis/loamscript
           ref: main
-          path: ./.github/temp/guosim
-      - name: install node on release action
-        run: |
-          cd ./.github/temp/guosim/release
-          npm ci
+          path: ./.github/temp/loamscript
+      # - name: install node on release action
+      #   run: |
+      #     cd ./.github/temp/guosim/release
+      #     npm ci
       - name: Github Script
         uses: actions/github-script@v5
         env:
@@ -39,6 +39,6 @@ jobs:
           create_prod_release: ${{ github.event.inputs.create_prod_release }}
         with:
           script: |
-            const script = require('./.github/temp/guosim/release/index.js')
+            const script = require('./.github/temp/loamscript/release/dist/index.js')
             await script({github, context, core})
 
