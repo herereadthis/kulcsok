@@ -1,6 +1,10 @@
 # Manually triggered Workflow
 name: 'Releaser'
 
+env:
+  # Modify the following as defined by the repository.
+  DEFAULT_PACKAGE_FILE: ./package.json
+
 on:
   workflow_dispatch:
     inputs:
@@ -9,10 +13,13 @@ on:
         default: master
         required: true
       create_prod_release:
-        type: boolean
-        description: 'Create Production Release'
-        default: false
+        type: choice
+        description: 'Release Type'
         required: true
+        default: prerelease
+        options: 
+        - prerelease
+        - production
 
 jobs:
   release_job:
@@ -23,7 +30,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.release_branch }}
       - name: Get current package version
-        run: echo "::set-output name=version::$(echo $(node -p -e $"require('./package.json').version"))"
+        run: echo "::set-output name=version::$(echo $(node -p -e $"require('${{ env.PACKAGE_DIRECTORIES }}').version"))"
         id: version
       - name: Get automation repo
         uses: actions/checkout@v2
@@ -39,8 +46,8 @@ jobs:
           release_version: ${{ steps.version.outputs.version }}
         with:
           script: |
-            const package = require('./package.json')
-            core.warning(package.version)
+            const {version} = require('${{ env.PACKAGE_DIRECTORIES }}')
+            core.warning(version)
             const script = require('./.github/temp/loamscript/release/index.js')
             await script({github, context, core})
 
