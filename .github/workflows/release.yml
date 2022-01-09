@@ -44,5 +44,5 @@ jobs:
           script: |
             const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
             const script = require('./.github/temp/loamscript/release/index.js')
-            await script({github, context, core, {version}})
+            await script({github, context, core, version})
 
