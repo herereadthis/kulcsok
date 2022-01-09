@@ -30,7 +30,7 @@ jobs:
         with:
           ref: ${{ github.event.inputs.release_branch }}
       - name: Get current package version
-        run: echo "::set-output name=version::$(echo $(node -p -e $"require('${{ env.PACKAGE_DIRECTORIES }}').version"))"
+        run: echo "::set-output name=version::$(echo $(node -p -e $"require('${{ env.DEFAULT_PACKAGE_FILE }}').version"))"
         id: version
       - name: Get automation repo
         uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
           release_version: ${{ steps.version.outputs.version }}
         with:
           script: |
-            const {version} = require('${{ env.PACKAGE_DIRECTORIES }}')
+            const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
             core.warning(version)
             const script = require('./.github/temp/loamscript/release/index.js')
             await script({github, context, core})
