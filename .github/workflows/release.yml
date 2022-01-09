@@ -39,6 +39,8 @@ jobs:
           release_version: ${{ steps.version.outputs.version }}
         with:
           script: |
+            const package = require('./package.json')
+            core.warning(package.version)
             const script = require('./.github/temp/loamscript/release/index.js')
             await script({github, context, core})
 
