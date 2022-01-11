@@ -4,6 +4,7 @@ name: 'Releaser'
 env:
   # Modify the following as defined by the repository.
   DEFAULT_PACKAGE_FILE: ./package.json
+  TEMP_CHECKOUT_DIRECTORY: ./.github/temp # add to .gitignore
 
 on:
   workflow_dispatch:
@@ -34,7 +35,7 @@ jobs:
         with:
           repository: herereadthis/loamscript
           ref: main
-          path: ./.github/temp/loamscript
+          path: ${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript
       - name: Github Script
         uses: actions/github-script@v5
         env:
@@ -43,6 +44,5 @@ jobs:
         with:
           script: |
             const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
-            const script = require('./.github/temp/loamscript/release/index.js')
+            const script = require('${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript/release/index.js')
             await script({github, context, core, version})
-
