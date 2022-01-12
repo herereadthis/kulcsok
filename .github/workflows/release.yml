@@ -50,5 +50,8 @@ jobs:
           script: |
             const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
             const script = require('${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript/release/index.js')
-            const template = require('${{ env.RELASE_TEMPLATE }}')
+            core.warning('abc')
+            core.warning(${{ env.RELEASE_TEMPLATE }})
+            const template = require('./.github/RELEASE_TEMPLATE/release.md')
+            core.warning('bcd')
             await script({github, context, core, version, version})
