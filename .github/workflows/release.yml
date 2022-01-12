@@ -5,6 +5,7 @@ env:
   # Modify the following as defined by the repository.
   DEFAULT_PACKAGE_FILE: ./package.json
   TEMP_CHECKOUT_DIRECTORY: ./.github/temp # add to .gitignore
+  RELEASE_TEMPLATE: ./.github/RELEASE_TEMPLATE/release.md
 
 on:
   workflow_dispatch:
@@ -45,4 +46,5 @@ jobs:
           script: |
             const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
             const script = require('${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript/release/index.js')
-            await script({github, context, core, version})
+            const template = require('${{ env.RELASE_TEMPLATE }}')
+            await script({github, context, core, version, version})
