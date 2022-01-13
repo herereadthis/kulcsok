@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: herereadthis/loamscript
-          ref: main
+          ref: a1
           path: ${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript
       - name: Github Script
         uses: actions/github-script@v5
@@ -50,8 +50,5 @@ jobs:
           script: |
             const {version} = require('${{ env.DEFAULT_PACKAGE_FILE }}')
             const script = require('${{ env.TEMP_CHECKOUT_DIRECTORY }}/loamscript/release/index.js')
-            core.warning('abc')
-            core.warning(${{ env.RELEASE_TEMPLATE }})
-            const template = require('./.github/RELEASE_TEMPLATE/release.md')
-            core.warning('bcd')
-            await script({github, context, core, version, version})
+            const template = '${{ env.RELEASE_TEMPLATE}}'
+            await script({github, context, core, version, template})
