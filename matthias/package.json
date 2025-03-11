@@ -1,0 +1,26 @@
+{
+  "name": "matthias",
+  "version": "1.0.0",
+  "description": "responsive web 2.0 blockchain cloud saas",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/herereadthis/matthias.git"
+  },
+  "author": "jimmy ha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/herereadthis/matthias/issues"
+  },
+  "homepage": "https://github.com/herereadthis/matthias#readme",
+  "dependencies": {
+    "crypto-js": "^4.0.0",
+    "dayjs": "^1.10.4",
+    "elliptic": "^6.5.4",
+    "lodash": "^4.17.21"
+  }
+}
